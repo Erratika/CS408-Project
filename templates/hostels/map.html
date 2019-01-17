@@ -8,7 +8,6 @@
 
     .region {
         fill: cornflowerblue;
-        stroke: black;
     }
 
     .region:hover {
@@ -32,7 +31,9 @@
     var zoom = d3.zoom().scaleExtent([1, 10])
         .on("zoom", function () {
             svg.selectAll('path') // To prevent stroke width from scaling
-                .attr('transform', d3.event.transform);
+                .attr('transform', d3.event.transform)
+            svg.selectAll('.boundary').style('stroke-width',1/d3.event.transform.k+'px')
+
 
         });
 
@@ -55,11 +56,8 @@
         var path = d3.geoPath().projection(projection);
 
         // using the path determine the bounds of the current map and use
-        // these to determine better values for the scale and translation
+        // these to determine better values for the translation
         var bounds = path.bounds(json);
-        var hscale = scale * width / (bounds[1][0] - bounds[0][0]);
-        var vscale = scale * height / (bounds[1][1] - bounds[0][1]);
-        var scale = (hscale < vscale) ? hscale : vscale;
         var offset = [width - (bounds[0][0] + bounds[1][0]) / 2,
             height - (bounds[0][1] + bounds[1][1]) / 2];
 
@@ -77,6 +75,7 @@
             .datum(topojson.mesh(topology, topology.objects.lad))
             .attr("d", path)
             .attr("class", "boundary");
+
 
     });
 
