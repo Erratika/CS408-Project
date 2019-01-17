@@ -5,6 +5,20 @@
     svg {
         border: 1px solid black;
     }
+
+    .region {
+        fill: cornflowerblue;
+        stroke: black;
+    }
+
+    .region:hover {
+        fill: red;
+    }
+
+    .boundary {
+        fill: none;
+        stroke: #777;
+    }
 </style>
 <svg></svg>
 <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -15,14 +29,10 @@
     var width = 600,
         height = 600;
     //Create SVG
-    var zoom = d3.zoom()
+    var zoom = d3.zoom().scaleExtent([1, 10])
         .on("zoom", function () {
-            svg.attr("transform", "translate(" +
-                d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
-            svg.selectAll("circle")
-                .attr("d", path.projection(projection));
-            svg.selectAll("path")
-                .attr("d", path.projection(projection));
+            svg.selectAll('path') // To prevent stroke width from scaling
+                .attr('transform', d3.event.transform);
 
         });
 
@@ -36,7 +46,7 @@
 
         //Define Projection model
         var center = d3.geoCentroid(json);
-        var scale = 150;
+        var scale = 200;
         var offset = [width / 2, height / 2];
         var projection = d3.geoMercator().scale(scale).center(center)
             .translate(offset);
@@ -55,13 +65,18 @@
 
         // new projection
         projection = d3.geoMercator().center(center)
-            .scale(scale).translate(offset);
+            .scale(4000).translate(offset);
         path = path.projection(projection);
 
         svg.selectAll("path")
             .data(json.features)
             .enter().append("path")
-            .attr("d", path);
+            .attr("d", path).attr("class", "region");
+
+        svg.append("path")
+            .datum(topojson.mesh(topology, topology.objects.lad))
+            .attr("d", path)
+            .attr("class", "boundary");
 
     });
 
