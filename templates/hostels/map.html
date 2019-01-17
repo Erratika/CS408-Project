@@ -1,0 +1,68 @@
+{% load static from staticfiles %}
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+    svg {
+        border: 1px solid black;
+    }
+</style>
+<svg></svg>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+
+<script>
+    //Define SVG width and height
+    var width = 600,
+        height = 600;
+    //Create SVG
+    var zoom = d3.zoom()
+        .on("zoom", function () {
+            svg.attr("transform", "translate(" +
+                d3.event.translate.join(",") + ")scale(" + d3.event.scale + ")");
+            svg.selectAll("circle")
+                .attr("d", path.projection(projection));
+            svg.selectAll("path")
+                .attr("d", path.projection(projection));
+
+        });
+
+    //Create SVG
+    var svg = d3.select("svg")
+        .attr("width", width)
+        .attr("height", height).call(zoom);
+    d3.json("{% static 'hostels/maps/topo_lad.json' %}").then(function (topology) {
+        //Get Json object data
+        var json = topojson.feature(topology, topology.objects.lad);
+
+        //Define Projection model
+        var center = d3.geoCentroid(json);
+        var scale = 150;
+        var offset = [width / 2, height / 2];
+        var projection = d3.geoMercator().scale(scale).center(center)
+            .translate(offset);
+
+        // create the path
+        var path = d3.geoPath().projection(projection);
+
+        // using the path determine the bounds of the current map and use
+        // these to determine better values for the scale and translation
+        var bounds = path.bounds(json);
+        var hscale = scale * width / (bounds[1][0] - bounds[0][0]);
+        var vscale = scale * height / (bounds[1][1] - bounds[0][1]);
+        var scale = (hscale < vscale) ? hscale : vscale;
+        var offset = [width - (bounds[0][0] + bounds[1][0]) / 2,
+            height - (bounds[0][1] + bounds[1][1]) / 2];
+
+        // new projection
+        projection = d3.geoMercator().center(center)
+            .scale(scale).translate(offset);
+        path = path.projection(projection);
+
+        svg.selectAll("path")
+            .data(json.features)
+            .enter().append("path")
+            .attr("d", path);
+
+    });
+
+</script>
