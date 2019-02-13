@@ -6,4 +6,5 @@ from django.http import HttpResponse
 
 def index(request):
     context = {}
-    return render(request, 'hostels/map.html', context)
+    views = ['hostels/map.html', 'hostels/map-input.html']
+    return render(request, views, context)

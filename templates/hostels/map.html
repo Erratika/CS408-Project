@@ -19,52 +19,69 @@
         stroke: #777;
     }
 </style>
-<svg></svg>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
+
+<body>
+<div>
+    <svg id="map" style="float: left; display: inline-block"></svg>
+    <div style="float: left; display: inline-block">
+
+        <!-- TODO Sliders that allow minimum and maximum selected value-->
+        <div><span>Price:</span><input type="range" name="price" onchange="update()"></div>
+        <div><span>Room Size:</span><input type="range" name="room-size" onchange="update()"></div>
+        <div><span>Rating:</span><input type="range" name="rating" max="10.0" min="0" onchange="update()"></div>
+
+        <!-- Room type -->
+        <div>
+            <span>Room Types:</span>
+            <input type="radio" name="room-type"><span>Male</span>
+            <input type="radio" name="room-type"><span>Female</span>
+            <input type="radio" name="room-type"><span>Mixed</span>
+            <input type="radio" name="room-type"><span>Private</span>
+        </div>
+
+        <!-- TODO Facilities and policies , drop down menus with all listed as checkboxes-->
+        <div><a onclick="showFacilities()">Facilities<span style="float: right">▼</span></a></div>
+        <div><a onclick="showPolicies()">Policies <span style="float: right">▼</span></a></div>
+
+
+    </div>
+
+</div>
+
 
 <script>
     //Define SVG width and height
     var width = 600,
         height = 600;
-    //Create SVG
-    var zoom = d3.zoom().scaleExtent([1, 10])
-        .on("zoom", function () {
-            svg.selectAll('path') // To prevent stroke width from scaling
-                .attr('transform', d3.event.transform)
-            svg.selectAll('.boundary').style('stroke-width',1/d3.event.transform.k+'px')
-
-
-        });
 
     //Create SVG
     var svg = d3.select("svg")
         .attr("width", width)
-        .attr("height", height).call(zoom);
+        .attr("height", height).call(d3.zoom()
+            .scaleExtent([1, 10])
+            .on("zoom", function () {
+                svg.selectAll('path')
+                    .attr('transform', d3.event.transform);
+
+                //Rescale border width on zoom.
+                svg.selectAll('.boundary')
+                    .style('stroke-width', 1 / d3.event.transform.k + 'px')
+            })
+        )
+    ;
+
     d3.json("{% static 'hostels/maps/topo_lad.json' %}").then(function (topology) {
+
         //Get Json object data
         var json = topojson.feature(topology, topology.objects.lad);
 
-        //Define Projection model
-        var center = d3.geoCentroid(json);
-        var scale = 200;
-        var offset = [width / 2, height / 2];
-        var projection = d3.geoMercator().scale(scale).center(center)
-            .translate(offset);
+        bounds = d3.geoBounds(json);
+        var projection = d3.geoMercator().fitSize([width, height], json);
 
-        // create the path
         var path = d3.geoPath().projection(projection);
 
-        // using the path determine the bounds of the current map and use
-        // these to determine better values for the translation
-        var bounds = path.bounds(json);
-        var offset = [width - (bounds[0][0] + bounds[1][0]) / 2,
-            height - (bounds[0][1] + bounds[1][1]) / 2];
-
-        // new projection
-        projection = d3.geoMercator().center(center)
-            .scale(4000).translate(offset);
-        path = path.projection(projection);
 
         svg.selectAll("path")
             .data(json.features)
@@ -80,3 +97,5 @@
     });
 
 </script>
+
+</body>
