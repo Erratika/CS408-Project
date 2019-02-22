@@ -1,3 +1,2 @@
-dj-config-url
 Django
-guinicorn
+gunicorn
