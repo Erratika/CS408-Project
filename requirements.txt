@@ -1,4 +1,3 @@
 dj-config-url
 Django
 guinicorn
-dj_
