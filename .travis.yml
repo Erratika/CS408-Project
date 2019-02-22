@@ -1,7 +1,7 @@
 language: python
 python:
 - 3.6
-services: mysql
+services: postgresql
 env:
 - DJANGO=2.1.3
 before_install:
