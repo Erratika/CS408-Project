@@ -1,9 +1,7 @@
-from decimal import Decimal
 import requests
 from bs4 import BeautifulSoup
 import re
-import json
-from datetime import date, timedelta, datetime
+from datetime import timedelta, datetime
 from selenium import webdriver
 from django.core.management.base import BaseCommand
 from hostels.models import *
