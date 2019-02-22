@@ -2,16 +2,15 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+    body{
+        margin: 0;
+    }
     svg {
         border: 1px solid black;
     }
 
     .region {
         fill: cornflowerblue;
-    }
-
-    .region:hover {
-        fill: red;
     }
 
     .boundary {
@@ -35,10 +34,10 @@
         <!-- Room type -->
         <div>
             <span>Room Types:</span>
-            <input type="radio" name="room-type"><span>Male</span>
-            <input type="radio" name="room-type"><span>Female</span>
-            <input type="radio" name="room-type"><span>Mixed</span>
-            <input type="radio" name="room-type"><span>Private</span>
+            <input type="checkbox" name="room-type"><span>Male</span>
+            <input type="checkbox" name="room-type"><span>Female</span>
+            <input type="checkbox" name="room-type"><span>Mixed</span>
+            <input type="checkbox" name="room-type"><span>Private</span>
         </div>
 
         <!-- TODO Facilities and policies , drop down menus with all listed as checkboxes-->
@@ -72,10 +71,10 @@
         )
     ;
 
-    d3.json("{% static 'hostels/maps/topo_lad.json' %}").then(function (topology) {
+    d3.json("{% static 'hostels/maps/topo_eer.json' %}").then(function (topology) {
 
         //Get Json object data
-        var json = topojson.feature(topology, topology.objects.lad);
+        var json = topojson.feature(topology, topology.objects.eer);
 
         bounds = d3.geoBounds(json);
         var projection = d3.geoMercator().fitSize([width, height], json);
@@ -89,7 +88,7 @@
             .attr("d", path).attr("class", "region");
 
         svg.append("path")
-            .datum(topojson.mesh(topology, topology.objects.lad))
+            .datum(topojson.mesh(topology, topology.objects.eer))
             .attr("d", path)
             .attr("class", "boundary");
 
