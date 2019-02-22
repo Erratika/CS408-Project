@@ -12,4 +12,5 @@ before_install:
   - sudo apt-get install libmysqlclient-dev python3-dev
 install:
   - pip3 install mysqlclient
+script:
 
