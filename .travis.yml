@@ -1,17 +1,17 @@
 language: python
-
 python:
-  - 3.6
-
+- 3.6
 services: mysql
-
 env:
-  - DJANGO=2.1.3
-
+- DJANGO=2.1.3
 before_install:
-  - sudo apt-get install libmysqlclient-dev python3-dev
+- sudo apt-get install libmysqlclient-dev python3-dev
 install:
-  - pip3 install -r requirements.txt
+- pip3 install -r requirements.txt
 script:
-  - python manage.py test
-
+- python manage.py test
+deploy:
+  provider: heroku
+  api_key:
+    secure: BsI4uK+klyaYrtvj+Bu6m+zpn34OKllOMurbtwWMVIA9CZYW9kJRbTRBq8y0DfX9ICQrdbmIeX7lkHwKVsWEWhWZVh9BlspbWabR5l1zaJoPhsGGBK4eD87n9+x+/DCZtAXXtT5Ik7goa5vctOLtXp0PwaKUrAxDZICnhVp405buNJeCTIAFShR/4YPl2g8dLGPY6t7R+CfcBqQ2CgNirdmPnNiH/C4b8u6Gt8C/GBgq9uNtCSSIuBLnPL20DyNA5GWXBFLv27hSOkTMytMvR+4RZ56Qvo2N3leIN0xTr5slAJj5MLLPcqznCO0DchK0dcXAoqqR1CSfyxyMobizvalOMBS+5zMUEFGu6b/6Zm51g3KN+Q/uYqh0NNuX+YaO2wr/i3xlezlweS8KqLhbhjtWtEzWoqpGgdXErw/3NxxPa8bbpXO1mjj3lL1KikwN5qmfWXN/lksoozu9nSI/dFe5/ZPFv+OFtWEQs0tIrcBdbm6QMV7CBXdlGHiTAF+nURDPUmJT4aZlizOne/Jryh6UdHiBMwMJBHeNbk4Uspop49aKgQzQUKKGQoX4NbyLzq0cti7zHz/1PGwgj239i2u7Lg3HJrwYpZFkQUIQm47A06QS2Fnw05W2JQpbQVzoxdCf1QfIWIeX/8bXXchi3eNxh52QcmTIIy7SPxFd9/Y=
+  app: hostel-data-vis 
