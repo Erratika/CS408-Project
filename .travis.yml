@@ -13,4 +13,5 @@ before_install:
 install:
   - pip3 install mysqlclient
 script:
+  - python manage.py test
 
