@@ -1,1 +1,2 @@
-mysqlclient Django
+mysqlclient
+Django
