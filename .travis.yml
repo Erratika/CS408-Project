@@ -1,12 +1,14 @@
 language: python
 python:
+- 3.5
 - 3.6
+- 3.7
 services: postgresql
 env:
 - DJANGO=2.1.3
 before_install:
-- sudo add-apt-repository ppa:ubuntugis/ppa && sudo apt-get update
-- sudo apt-get install libmysqlclient-dev python3-dev gdal-bin geos postgis
+- sudo add-apt-repository -y ppa:ubuntugis/ppa && sudo apt-get update
+- sudo apt-get install gdal-bin geos postgis
 install:
 - pip3 install -r requirements.txt
 script:
