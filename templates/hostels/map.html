@@ -132,6 +132,10 @@
         <!-- Room type -->
         <div>
             <span>Room Types:</span>
+            <input type="checkbox" name="room-type"><span>Male</span>
+            <input type="checkbox" name="room-type"><span>Female</span>
+            <input type="checkbox" name="room-type"><span>Mixed</span>
+            <input type="checkbox" name="room-type"><span>Private</span>
             {% for room_type in room_types_all %}
                 <!-- TODO utilise django to get all room types into check boxes -->
                 <div><input type="checkbox" name="room-type" checked="checked"
@@ -199,6 +203,7 @@
 
         //Get Json object data
         var json = topojson.feature(topology, topology.objects.eer);
+
         bounds = d3.geoBounds(json);
         var projection = d3.geoMercator().fitSize([width, height], json);
 

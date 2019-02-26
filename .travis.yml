@@ -1,3 +1,17 @@
 language: python
+python:
+- 3.6
+services: postgresql
+env:
+- DJANGO=2.1.3
+before_install:
+- sudo apt-get install libmysqlclient-dev python3-dev
 install:
-- django
+- pip3 install -r requirements.txt
+script:
+- python manage.py test
+deploy:
+  provider: heroku
+  api_key:
+    secure: nOnQsgnB3sbirKX2Hx2NqQibeIt3V02A+6gHLgooe7A40PLuF907L9yma1IQaqPU8fATRNVkzTSwfIhmZiGgyhHpX0khmU/BEklztMW+2XwgwgOx03J3D63YhPyq+33Y3rdY00ny47fxudPgZ5Whb10j/aiIg/s3XnZkuIUF4rpNnzHW7XzUat0qlo1MQ5kt/KpNyiJxpbH/u2iVO+Q1AzwESKWkcDQmxNKIFJ2uF/O/Gb+eJREZ3JP9i4xoKG9SWO/ZUI9K5wPdWjJJMQSiINIfPcIImx6mlBNWBhiJ+quJW4DowXccZBLwYeyOXE+XWDt39pNXQY8bS8Fhvz44gzq3CW8bKrLys5mQA70M90ag2l3hyXSiS7EZzidpS46KY+INRDT0XRPfSoSzHn0U2G+SA5UTKLZPmt4I45RZOxRNPd7uyqANoSLojg7Lak6nR7SsRHNBKQCEMf+h3k/+HCGffrrKXic+f2Uqg4YZmJcmqK3Kw874rN+pT9qVlxyRysRQK81pnqpqOT2kyfVeIvH/msz1EQKaZ19JpyrN2D5eRlN8Rmtnqdp40B5e+Uipkt00reo99Uz6wq2TByBdgni2DzP4yKg06jHIYxRB0uZG5/v0tWSVE7f69Ur5kkh/pyhNSq1iZgr5SU09N2UtNGd5uF1DdfDl1YtFsOmeQtQ=
+  app: hostel-data-vis

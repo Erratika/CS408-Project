@@ -1,3 +1,4 @@
+import django_heroku
 """
 Django settings for Project project.
 
@@ -50,9 +51,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-SERIALIZATION_MODULES = {
-    "geojson": "django.contrib.gis.serializers.geojson",
-}
 
 ROOT_URLCONF = 'Project.urls'
 
@@ -77,7 +75,6 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -89,6 +86,13 @@ DATABASES = {
 
     }
 }
+import dj_database_url
+
+db_from_env = dj_database_url.config()
+
+DATABASES['default'].update(db_from_env)
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -123,11 +127,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (os.path.join('static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'), )
+
+django_heroku.settings(locals())
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
