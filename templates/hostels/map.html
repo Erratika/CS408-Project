@@ -2,6 +2,10 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+    body {
+        margin: 0;
+    }
+
     svg {
         border: 1px solid black;
     }
@@ -10,46 +14,162 @@
         fill: cornflowerblue;
     }
 
-    .region:hover {
-        fill: red;
+    .hostel {
+
     }
 
     .boundary {
         fill: none;
-        stroke: #777;
+        stroke: #000;
     }
 </style>
 <script src="https://d3js.org/d3.v5.min.js"></script>
+<script
+        src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+<script
+        src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+        integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+        crossorigin="anonymous"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="" type="text/javascript"></script>
+<script>
+    //Inititalise JQuery components.
+    $(function () {
+        $("#slider-price").slider({
+            range: true,
+            min: 0,
+            max: 1500,
+            values: [15.00, 35.00],
+            step: 0.50,
+            slide: function (event, ui) {
+                $("#price-display").text("£" + ui.values[0].toFixed(2) + " - £" + ui.values[1].toFixed(2));
+            }
+        });
+        $("#price-display").text("£" + $("#slider-price").slider("values", 0).toFixed(2) +
+            " - £" + $("#slider-price").slider("values", 1).toFixed(2));
+    });
+    $(function () {
+        $("#slider-rating").slider({
+            range: true,
+            min: 0.0,
+            max: 10.0,
+            values: [3.5, 6.5],
+            step: 0.1,
+            slide: function (event, ui) {
+                $("#rating-display").text(ui.values[0].toFixed(1) + " - " + ui.values[1].toFixed(1));
+            }
+        });
+        $("#rating-display").text($("#slider-rating").slider("values", 0).toFixed(1) + " - " +
+            $("#slider-rating").slider("values", 1).toFixed(1));
+    });
+    $(function () {
+        $("#slider-size").slider({
+            range: true,
+            min: 1,
+            max: 24,
+            values: [7, 17],
+            step: 1,
+            slide: function (event, ui) {
+                $("#size-display").text(ui.values[0] + " - " + ui.values[1]);
+            }
+        });
+        $("#size-display").text($("#slider-size").slider("values", 0) + " - " +
+            $("#slider-size").slider("values", 1));
+    });
 
+
+    function showFacilities() {
+        $("#facilities").toggle()
+    }
+
+    function showPolicies() {
+        $("#policies").toggle()
+    }
+
+    function update_map() {
+        $.getJSON({
+            url: "/api/locations/",
+            complete: function (html) {
+                var json = JSON.parse(html.responseText)
+                console.log(json)
+                svg.selectAll("circle")
+                    .datum(json.features)
+                    .append("circle")
+                    .attr("class", "hostel")
+                    .attr("cx", function (d) {
+                        return projection(d)[0];
+                    })
+                    .attr("cy", function (d) {
+                        return projection(d)[1];
+                    })
+                    .attr("r", "8px")
+                    .attr("fill", "red")
+            }
+        });
+    }
+
+
+</script>
 <body>
 <div>
     <svg id="map" style="float: left; display: inline-block"></svg>
     <div style="float: left; display: inline-block">
 
         <!-- TODO Sliders that allow minimum and maximum selected value-->
-        <div><span>Price:</span><input type="range" name="price" onchange="update()"></div>
-        <div><span>Room Size:</span><input type="range" name="room-size" onchange="update()"></div>
-        <div><span>Rating:</span><input type="range" name="rating" max="10.0" min="0" onchange="update()"></div>
+        <div><span>Price: </span><span id="price-display"></span>
+            <div class="slider-range" id="slider-price"></div>
+        </div>
+        <div><span>Room Size: </span><span id="size-display"></span>
+            <div class="slider-range" id="slider-size"></div>
+        </div>
+        <div><span>Rating: </span><span id="rating-display"></span>
+            <div class="slider-range" id="slider-rating"></div>
+        </div>
 
         <!-- Room type -->
         <div>
             <span>Room Types:</span>
-            <input type="radio" name="room-type"><span>Male</span>
-            <input type="radio" name="room-type"><span>Female</span>
-            <input type="radio" name="room-type"><span>Mixed</span>
-            <input type="radio" name="room-type"><span>Private</span>
+            {% for room_type in room_types_all %}
+                <!-- TODO utilise django to get all room types into check boxes -->
+                <div><input type="checkbox" name="room-type" checked="checked"
+                            onchange="update_map()"><span>{{ room_type }}</span></div>
+            {% endfor %}
         </div>
 
-        <!-- TODO Facilities and policies , drop down menus with all listed as checkboxes-->
-        <div><a onclick="showFacilities()">Facilities<span style="float: right">▼</span></a></div>
-        <div><a onclick="showPolicies()">Policies <span style="float: right">▼</span></a></div>
+        <!-- TODO Django to pull all facilities and policies from database -->
+        <div>
+            <a onclick="showFacilities()">
+                <div> Facilities<span style="float: right">▼</span></div>
+            </a>
+            <div id="facilities">
+                {% for facility in facilities_all %}
+                    <div><input type="checkbox" checked="checked" onchange="update_map()"><span>{{ facility }}</span>
+                    </div>
+                {% endfor %}
+            </div>
 
-
+        </div>
+        <div>
+            <a onclick="showPolicies()">
+                <div>Policies <span style="float: right">▼</span></div>
+            </a>
+            <div id="policies">
+                {% for policy in policies_all %}
+                    <div><input type="checkbox" checked="checked" onchange="update_map()"><span>{{ policy }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
 </div>
+<script>
 
+    $("#facilities").hide();
+    $("#policies").hide();
+</script>
 
 <script>
     //Define SVG width and height
@@ -64,6 +184,9 @@
             .on("zoom", function () {
                 svg.selectAll('path')
                     .attr('transform', d3.event.transform);
+                svg.selectAll('circle')
+                    .attr('transform', d3.event.transform)
+                    .style('r', 2 / d3.event.transform.k + 'px');
 
                 //Rescale border width on zoom.
                 svg.selectAll('.boundary')
@@ -72,11 +195,10 @@
         )
     ;
 
-    d3.json("{% static 'hostels/maps/topo_lad.json' %}").then(function (topology) {
+    d3.json("{% static 'hostels/maps/topo_eer.json' %}").then(function (topology) {
 
         //Get Json object data
-        var json = topojson.feature(topology, topology.objects.lad);
-
+        var json = topojson.feature(topology, topology.objects.eer);
         bounds = d3.geoBounds(json);
         var projection = d3.geoMercator().fitSize([width, height], json);
 
@@ -89,9 +211,29 @@
             .attr("d", path).attr("class", "region");
 
         svg.append("path")
-            .datum(topojson.mesh(topology, topology.objects.lad))
+            .datum(topojson.mesh(topology, topology.objects.eer))
             .attr("d", path)
             .attr("class", "boundary");
+
+        $.getJSON({
+            url: "/api/locations/",
+            complete: function (html) {
+                var json = JSON.parse(html.responseText)
+                svg.selectAll("path")
+                    .data(json.features)
+                    .enter()
+                    .append("circle")
+                    .attr("class", "hostel")
+                    .attr("cx", function (d) {
+                        return projection(d.geometry.coordinates)[0];
+                    })
+                    .attr("cy", function (d) {
+                        return projection(d.geometry.coordinates)[1];
+                    })
+                    .attr("r", "2px")
+                    .attr("fill", "red")
+            }
+        });
 
 
     });

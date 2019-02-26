@@ -1,14 +1,15 @@
-from decimal import Decimal
+import re
+import time
+from datetime import timedelta, datetime
+
 import requests
 from bs4 import BeautifulSoup
-import re
-import json
-from datetime import date, timedelta, datetime
-from selenium import webdriver
-from django.core.management.base import BaseCommand
-from hostels.models import *
+from django.contrib.gis.geos import GEOSGeometry
 from django.contrib.gis.geos.point import Point
+from django.core.management.base import BaseCommand
+from selenium import webdriver
 
+from hostels.models import *
 
 
 class Command(BaseCommand):
@@ -43,7 +44,6 @@ class Command(BaseCommand):
                     locations.append(location)
             return locations
 
-
         def decomposeRooms(room_description):
             room_data = room_description.split()
             for x in range(len(room_data)):
@@ -70,7 +70,7 @@ class Command(BaseCommand):
                     print("Error handling " + room_data[x])
             return {"room_size": room_size, "room_type": room_type}
 
-        def getRooms(url, browser,hostel):
+        def getRooms(url, browser, hostel):
             from_date = datetime.now().date()
             duration_delta = timedelta(days=365)
             end_date = from_date + duration_delta
@@ -91,26 +91,27 @@ class Command(BaseCommand):
                     price = e.find('span', attrs={'class', 'rate-type-price'}).text
                     room = decomposeRooms(room_title)
 
-                    if not RoomTypes.objects.filter(type=room['room_type']):
-                        RoomTypes.objects.create(type=room['room_type'])
-                    if not RoomSizes.objects.filter(size=room['room_size']):
-                        RoomSizes.objects.create(size=room['room_size'])
-                    if not Prices.objects.filter(hostel_id=Hostel.objects.get(name=hostel).id,
-                                          from_date=from_date_str,
-                                          to_date=to_date_str,
-                                          price=float(re.sub(r'[^\d.]', '', price)),
-                                          room_size_id=RoomSizes.objects.get(size=room['room_size']).id,
-                                          room_type_id=RoomTypes.objects.get(type=room['room_type']).id).exists():
-                        Prices.objects.create(hostel_id=Hostel.objects.get(name=hostel).id,
-                                              from_date=from_date_str,
-                                              to_date=to_date_str,
-                                              price=float(re.sub(r'[^\d.]', '', price)),
-                                              room_size_id=RoomSizes.objects.get(size=room['room_size']).id,
-                                              room_type_id=RoomTypes.objects.get(type=room['room_type']).id)
+                    # if not RoomTypes.objects.filter(type=room['room_type']):
+                    #     RoomTypes.objects.create(type=room['room_type'])
+                    # if not RoomSizes.objects.filter(size=room['room_size']):
+                    #     RoomSizes.objects.create(size=room['room_size'])
+                    # if not Prices.objects.filter(hostel_id=Hostel.objects.get(name=hostel).id,
+                    #                              from_date=from_date_str,
+                    #                              to_date=to_date_str,
+                    #                              price=float(re.sub(r'[^\d.]', '', price)),
+                    #                              room_size_id=RoomSizes.objects.get(size=room['room_size']).id,
+                    #                              room_type_id=RoomTypes.objects.get(
+                    #                                  type=room['room_type']).id).exists():
+                    #     Prices.objects.create(hostel_id=Hostel.objects.get(name=hostel).id,
+                    #                           from_date=from_date_str,
+                    #                           to_date=to_date_str,
+                    #                           price=float(re.sub(r'[^\d.]', '', price)),
+                    #                           room_size_id=RoomSizes.objects.get(size=room['room_size']).id,
+                    #                           room_type_id=RoomTypes.objects.get(type=room['room_type']).id)
 
-
-        def getReviews(url, browser,hostel):
+        def getReviews(url, browser, hostel):
             browser.get(url + "#reviews")
+            time.sleep(3)
             soup = BeautifulSoup(browser.page_source, "html.parser")
             section = soup.find("section", attrs={"name": "ms-reviews"})
             if section:
@@ -119,41 +120,44 @@ class Command(BaseCommand):
                     rating = rating_tag.contents[0]
                     score = float(rating_tag.contents[1].text)
 
-
-                    if not RatingCategories.objects.filter(category=rating):
-                        RatingCategories.objects.create(category=rating)
-                    if not RatingsHostel.objects.filter(rating_category_id=RatingCategories.objects.get(category=rating).id,
-                                                        hostel_id=Hostel.objects.get(name=hostel).id,
-                                                        rating=score).exists():
-                        RatingsHostel.objects.create(rating_category_id=RatingCategories.objects.get(category=rating).id,
-                                                     hostel_id=Hostel.objects.get(name=hostel).id,
-                                                     rating=score)
+                    # if not RatingCategories.objects.filter(category=rating):
+                    #     RatingCategories.objects.create(category=rating)
+                    # if not RatingsHostel.objects.filter(
+                    #         rating_category_id=RatingCategories.objects.get(category=rating).id,
+                    #         hostel_id=Hostel.objects.get(name=hostel).id,
+                    #         rating=score).exists():
+                    #     RatingsHostel.objects.create(
+                    #         rating_category_id=RatingCategories.objects.get(category=rating).id,
+                    #         hostel_id=Hostel.objects.get(name=hostel).id,
+                    #         rating=score)
             next_flag = True
             while next_flag:
-                review_wrapper = soup.find("div", attrs={"class": "reviews-overlay-content"})
-                if review_wrapper:
-                    review_tags = review_wrapper.find_all("div", attrs={"class": "review-info"})
-                    for review_tag in review_tags:
-                        review = review_tag.find("div", attrs={"class": "notes"}).text.replace("\r", " ").strip()
-                        date = review_tag.find("div", attrs={"class": "date"}).contents[2].text
-                        rating = review_tag.find("div", attrs={"class": "score"}).text.strip()
+                # review_wrapper = section.find("sections", attrs={'class':'slide-panel-dialog slide-panel-from-right'})
+                # print(review_wrapper)
+                # if review_wrapper:
+                review_tags = soup.find_all("div", attrs={"class": "property-review row"})
+                for review_tag in review_tags:
+                    review = review_tag.find("div", attrs={"class": "notes"}).text.replace("\r", " ").strip()
+                    date = review_tag.find("div", attrs={"class": "date"}).contents[2].text
+                    date = datetime.strptime(date, "%d %b %Y").strftime("%Y-%m-%d")
+                    rating = review_tag.find("div", attrs={"class": "score"}).text.strip()
 
-                        # if not Reviews.objects.filter(hostel_id=Hostel.objects.get(name=hostel).id,
-                        #                               rating=rating,
-                        #                               review=review,
-                        #                               date=date).exists():
-                        #     Reviews.objects.create(hostel_id=Hostel.objects.get(name=hostel).id,
-                        #                            rating=rating,
-                        #                            review=review,
-                        #                            date=date)
+                    if not Reviews.objects.filter(hostel=Hostel.objects.get(name=hostel),
+                                                  rating=rating,
+                                                  review=review,
+                                                  date=date).exists():
+                        Reviews.objects.create(hostel=Hostel.objects.get(name=hostel),
+                                               rating=rating,
+                                               review=review,
+                                               date=date)
 
-
-                    next = soup.find("div", attrs={"class": "pagination-next"})
-                    if not next or 'disabled' in next.attrs['class']:
-                        next_flag = False
-                    else:
-                        browser.find_element_by_class_name("pagination-next").click()
-                        soup = BeautifulSoup(browser.page_source)
+                next = soup.find("div", attrs={"class": "pagination-next"})
+                if not next or 'disabled' in next.attrs['class']:
+                    next_flag = False
+                else:
+                    browser.find_element_by_class_name("pagination-next").click()
+                    time.sleep(2)
+                    soup = BeautifulSoup(browser.page_source)
 
         def getPolicies(url, browser, hostel):
             browser.get(url + "#houserules")
@@ -164,47 +168,43 @@ class Command(BaseCommand):
                     policy = tag.contents[1].strip()
                     if not Policies.objects.filter(policy=policy).exists():
                         Policies.objects.create(policy=policy)
-                    if not PoliciesHostel.objects.filter(hostel=Hostel.objects.get(name=hostel).id,
-                                                         policy=Policies.objects.get(policy=policy).id).exists():
-                        PoliciesHostel.objects.create(hostel_id=Hostel.objects.get(name=hostel).id,
-                                                      policy_id=Policies.objects.get(policy=policy).id)
+                    # if not PoliciesHostel.objects.filter(hostel=Hostel.objects.get(name=hostel).id,
+                    #                                      policy=Policies.objects.get(policy=policy).id).exists():
+                    #     PoliciesHostel.objects.create(hostel_id=Hostel.objects.get(name=hostel).id,
+                    #                                   policy_id=Policies.objects.get(policy=policy).id)
 
         def getHostelData(url, browser):
             browser.get(url)
-            soup = BeautifulSoup(browser.page_source, "html.parser")
+            soup = BeautifulSoup(browser.page_source)
             name = soup.find('h1', attrs={'class': 'main-title'})['data-name']
             address = soup.find('span', attrs={'class': 'adddress'}).text
             address = re.sub("\n[ ]*", "", address)
             location = geocode(address)
             description = soup.find('div', attrs={'class': 'text'}).text.strip()[:-17]
-
-            if not Hostel.objects.filter(name=name,
-                                         location=location,
-                                         description=description).exists():
-                Hostel.objects.create(name=name,
-                                      location=location,
-                                      description=description)
+            #
+            # Hostel.objects.create(name=name,
+            #                   location=location,
+            #                   description=description)
 
             for f in soup.findAll('li', attrs={'class': 'facility'}):
                 facility = f.text.strip()
-                if not Facilities.objects.filter(facilities=facility).exists():
-                    Facilities.objects.create(facilities=facility)
-                if not FacilitiesHostel.objects.filter(hostel_id=Hostel.objects.get(name=name).id,
-                                                       facility_id=Facilities.objects.get(
-                                                           facilities=facility).id).exists():
-                    FacilitiesHostel.objects.create(hostel_id=Hostel.objects.get(name=name).id,
-                                                    facility_id=Facilities.objects.get(facilities=facility).id)
-            getPolicies(url, browser, name)
-            getReviews(url, browser,name)
-            getRooms(url, browser,name)
-
+                # if not Facilities.objects.filter(facilities=facility).exists():
+                #     Facilities.objects.create(facilities=facility)
+                # if not FacilitiesHostel.objects.filter(hostel_id=Hostel.objects.get(name=name).id,
+                #                                        facility_id=Facilities.objects.get(
+                #                                            facilities=facility).id).exists():
+                #     FacilitiesHostel.objects.create(hostel_id=Hostel.objects.get(name=name).id,
+                #                                     facility_id=Facilities.objects.get(facilities=facility).id)
+            # getPolicies(url, browser, name)
+            getReviews(url, browser, name)
+            # getRooms(url, browser, name)
 
         def geocode(address):
             response = requests.get(
                 "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&region=uk&key=AIzaSyAC1fGnwPFHXDQXlBeRVuVkEHHDI_Vc_FE")
             data = response.json()
             location = data['results'][0]['geometry']['location']
-            return Point(location['lng'],location['lat'])
+            return GEOSGeometry(Point(location['lng'], location['lat']), srid=4326)
 
         with open('data/hostel-links.txt', 'r') as f:
             links = f.readlines()
@@ -215,4 +215,3 @@ class Command(BaseCommand):
                 getHostelData(link, browser)
 
         browser.quit()
-
