@@ -75,6 +75,7 @@ WSGI_APPLICATION = 'Project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -83,9 +84,19 @@ DATABASES = {
         'PASSWORD': 'password',
         'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
         'PORT': '5432',
-
     }
 }
+if 'TRAVIS' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE':   'django.db.backends.postgresql_psycopg2',
+            'NAME':     'hostels',
+            'USER':     'postgres',
+            'PASSWORD': '',
+            'HOST':     'localhost',
+            'PORT':     '',
+        }
+    }
 import dj_database_url
 
 db_from_env = dj_database_url.config()
