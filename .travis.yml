@@ -16,6 +16,9 @@ before_install:
 - sudo apt-get install binutils gdal-bin postgis python3-gdal libproj-dev
 install:
 - pip3 install -r requirements.txt
+before_script:
+  - psql -U postgres -c "CREATE DATABASE hostels"
+  - psql -U postgres -c "CREATE EXTENSION postgis"
 script:
 - python3 manage.py test
 deploy:
