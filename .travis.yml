@@ -15,7 +15,6 @@ before_install:
 install:
 - pip3 install -r requirements.txt
 before_script:
-  - service postgres start
   - psql -U postgres -c "CREATE DATABASE hostels"
   - psql -U postgres -c "CREATE EXTENSION postgis"
 script:
