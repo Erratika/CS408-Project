@@ -91,7 +91,10 @@ if 'TRAVIS' in os.environ:
         'default': {
             'ENGINE':   'django.db.backends.postgresql_psycopg2',
             'NAME':     'hostels',
-            'USER':     os.environ['PGUSER'],
+            'USER': 'hostels',
+            'PASSWORD': 'password',
+            'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
+            'PORT': '5433',
         }
     }
 import dj_database_url

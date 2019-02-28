@@ -12,10 +12,9 @@ services: postgresql
 env:
   global:
     - PGPORT=5433
-    - PGUSER = travis
 before_install:
 - sudo apt-get install binutils gdal-bin postgis python3-gdal libproj-dev
-- sudo - postgres -i psql -c "CREATE DATABSE hostels; CREATE EXTENSION postgis;"
+- sudo -u postgres -i psql -c "CREATE DATABSE hostels; CREATE EXTENSION postgis; CREATE USER hostels WITH PASSWORD 'password';"
 install:
 - pip3 install -r requirements.txt
 script:
