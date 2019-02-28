@@ -92,9 +92,6 @@ if 'TRAVIS' in os.environ:
             'ENGINE':   'django.db.backends.postgresql_psycopg2',
             'NAME':     'hostels',
             'USER':     'postgres',
-            'PASSWORD': '',
-            'HOST':     'localhost',
-            'PORT':     os.environ['PGPORT'],
         }
     }
 import dj_database_url
