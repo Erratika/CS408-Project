@@ -94,7 +94,7 @@ if 'TRAVIS' in os.environ:
             'USER':     'postgres',
             'PASSWORD': '',
             'HOST':     'localhost',
-            'PORT':     '',
+            'PORT':     os.environ['PGPORT'],
         }
     }
 import dj_database_url
