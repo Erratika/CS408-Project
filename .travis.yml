@@ -8,6 +8,7 @@ addons:
     packages:
     - postgresql-10
     - postgresql-client-10
+services: postgresql
 env:
   global:
     - PGPORT=5433
