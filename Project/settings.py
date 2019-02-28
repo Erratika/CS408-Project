@@ -91,7 +91,7 @@ if 'TRAVIS' in os.environ:
         'default': {
             'ENGINE':   'django.db.backends.postgresql_psycopg2',
             'NAME':     'hostels',
-            'USER':     'postgres',
+            'USER':     os.environ['PGUSER'],
         }
     }
 import dj_database_url
