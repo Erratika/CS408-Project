@@ -72,11 +72,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Project.wsgi.application'
 import dj_database_url
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': dj_database_url.config( default="postgis://postgres:password@localhost:5432/postgres")
     }
 
 
@@ -113,11 +112,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'), )
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.

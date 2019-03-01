@@ -1,82 +1,8 @@
-{% load static from staticfiles %}
+{% load static  %}
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-    body {
-        margin: 0;
-        height: 100%;
-    }
 
-    html {
-        height: 100%
-    }
-
-    .collapsible {
-        cursor: pointer;
-        padding: 16px;
-        width: 100%;
-        text-align: left;
-        outline: none;
-        font-size: 20px;
-        border: black solid 1px;
-        background-color: lightslategray;
-    }
-
-    .content {
-        padding: 12px;
-        max-height: 400px;
-        overflow-y: auto;
-
-    }
-
-    .collapsible:hover {
-        background-color: slategrey;
-    }
-
-    .region {
-        fill: cornflowerblue;
-    }
-
-    .hostel {
-
-    }
-
-    .boundary {
-        fill: none;
-        stroke: #000;
-    }
-
-    #container {
-        display: grid;
-        grid-template-rows: 50% 50%;
-        grid-template-columns: 300px auto 32.5%;
-        height: 100%;
-    }
-
-    #map-wrapper {
-        background-color: coral;
-        grid-column-start: 2;
-        grid-column-end: 2;
-        grid-row-start: 1;
-        grid-row-end: 3;
-    }
-
-    #control-wrapper {
-        background-color: white;
-        grid-column-start: 1;
-        grid-column-end: 2;
-        grid-row-start: 1;
-        grid-row-end: 3;
-        overflow: hidden;
-    }
-
-    #cloud-wrapper {
-        background-color: blue;
-        grid-column-start: 3;
-        grid-column-end: 3;
-        grid-row-start: 1;
-        grid-row-end: 3;
-    }
 
 </style>
 <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -159,54 +85,12 @@
     }
 </script>
 <body>
-<div id="container">
-    <div id="control-wrapper">
-        <!-- TODO Sliders that allow minimum and maximum selected value-->
-        <div><span>Price: </span><span id="price-display"></span>
-            <div class="slider-range" id="slider-price"></div>
-        </div>
-        <div><span>Room Size: </span><span id="size-display"></span>
-            <div class="slider-range" id="slider-size"></div>
-        </div>
-        <div><span>Rating: </span><span id="rating-display"></span>
-            <div class="slider-range" id="slider-rating"></div>
-        </div>
 
-        <!-- Room type -->
-
-        <button class="collapsible" id="rooms">Rooms</button>
-        <div class="content">
-            <span>Room Types:</span>
-            {% for room_type in room_types_all %}
-                <!-- TODO utilise django to get all room types into check boxes -->
-                <div><input type="checkbox" name="room-type" checked="checked"
-                            onchange="update_map()"><span>{{ room_type }}</span></div>
-            {% endfor %}
-        </div>
-
-        <button class="collapsible" id="facilities">Facilities</button>
-        <div class="content">
-            {% for facility in facilities_all %}
-                <div><input type="checkbox" checked="checked" onchange="update_map()"><span>{{ facility }}</span>
-                </div>
-            {% endfor %}
-        </div>
-
-
-        <button class="collapsible" id="policies">Policies</button>
-        <div class="content">
-            {% for policy in policies_all %}
-                <div><input type="checkbox" checked="checked" onchange="update_map()"><span>{{ policy }}</span>
-                </div>
-            {% endfor %}
-        </div>
-
-    </div>
     <div id="map-wrapper">
         <svg id="map"></svg>
     </div>
     <div id="cloud-wrapper"></div>
-</div>
+
 <script>
     var acc = document.getElementsByClassName("collapsible");
     var i;

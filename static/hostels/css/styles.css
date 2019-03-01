@@ -1,0 +1,75 @@
+    body {
+        margin: 0;
+        height: 100%;
+    }
+
+    html {
+        height: 100%
+    }
+
+    .collapsible {
+        cursor: pointer;
+        padding: 16px;
+        width: 100%;
+        text-align: left;
+        outline: none;
+        font-size: 20px;
+        border: black solid 1px;
+        background-color: lightslategray;
+    }
+
+    .content {
+        padding: 12px;
+        max-height: 400px;
+        overflow-y: auto;
+
+    }
+
+    .collapsible:hover {
+        background-color: slategrey;
+    }
+
+    .region {
+        fill: cornflowerblue;
+    }
+
+    .hostel {
+
+    }
+
+    .boundary {
+        fill: none;
+        stroke: #000;
+    }
+
+    #container {
+        display: grid;
+        grid-template-rows: 50% 50%;
+        grid-template-columns: 300px auto 32.5%;
+        height: 100%;
+    }
+
+    #map-wrapper {
+        background-color: coral;
+        grid-column-start: 2;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
+
+    #control-wrapper {
+        background-color: white;
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+        grid-row-end: 3;
+        overflow: hidden;
+    }
+
+    #cloud-wrapper {
+        background-color: blue;
+        grid-column-start: 3;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 3;
+    }
