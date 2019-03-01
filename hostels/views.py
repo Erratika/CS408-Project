@@ -21,7 +21,7 @@ def index(request):
                'room_types_all': room_types_all,
                'price_max': price_max,
                'price_min': price_min}
-    views = 'hostels/map.html'
+    views = 'hostels/index.html'
     return render(request, views, context)
 
 

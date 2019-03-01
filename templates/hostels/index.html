@@ -1,10 +1,16 @@
+{% load static  %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Hostel Visualization</title>
+    <link rel="stylesheet" href="{% static 'hostels/css/styles.css' %}">
 </head>
 <body>
+<div class="container">
+{% include 'hostels/controls.html' %}
+{% include 'hostels/map.html' %}
+</div>
 
 </body>
 </html>

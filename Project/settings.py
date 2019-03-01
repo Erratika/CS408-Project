@@ -1,4 +1,3 @@
-import django_heroku
 """
 Django settings for Project project.
 
@@ -72,26 +71,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Project.wsgi.application'
-
+import dj_database_url
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'hostels',
-        'USER': 'hostels',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',  # Or an IP Address that your DB is hosted on
-        'PORT': '5432',
-
+    'default': dj_database_url.config( default="postgis://postgres:password@localhost:5432/postgres")
     }
-}
-import dj_database_url
-
-db_from_env = dj_database_url.config()
-
-DATABASES['default'].update(db_from_env)
-
 
 
 # Password validation
@@ -127,14 +112,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = (os.path.join(BASE_DIR,'static'), )
-
-django_heroku.settings(locals())
-
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
