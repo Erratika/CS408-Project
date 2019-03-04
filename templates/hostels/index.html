@@ -1,15 +1,30 @@
-{% load static  %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Hostel Visualization</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+    <script
+            src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"
+            integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
+            crossorigin="anonymous"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script src="{% static 'hostels/javascript/FilterControls.js' %}" type="text/javascript" language="JavaScript"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{% static 'hostels/css/styles.css' %}">
+
+
 </head>
 <body>
 <div class="container">
-{% include 'hostels/controls.html' %}
-{% include 'hostels/map.html' %}
+    {% include 'hostels/filters.html' %}
+    {% include 'hostels/map.html' %}
 </div>
 
 </body>

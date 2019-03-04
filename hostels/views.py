@@ -10,9 +10,9 @@ from .serializers import LocationsSerializer
 # Create your views here.
 
 def index(request):
-    all_facilities = Facilities.objects.values_list('facility', flat=True).order_by('facility')
-    policies_all = Policies.objects.values_list('policy', flat=True).order_by('policy')
-    room_types_all = RoomTypes.objects.values_list('type', flat=True)
+    all_facilities = Facilities.objects.all().order_by('facility')
+    policies_all = Policies.objects.all().order_by('policy')
+    room_types_all = RoomTypes.objects.all()
     price_max = Prices.objects.aggregate(Max('price'))
     price_min = Prices.objects.aggregate(Min('price'))
 
@@ -39,6 +39,10 @@ class LocationsViewSet(viewsets.ViewSet):
         queryset = queryset.filter(id__in=averages.values('hostel'))
         if self.request.query_params.get('rating_max', None):
             queryset = queryset.filter(ratingshostel__rating__lte=self.request.query_params.get('rating_max', None))
+        if self.request.query_params.get('rating_min', None):
+            queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
+        if self.request.query_params.get('rating_min', None):
+            queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
         if self.request.query_params.get('rating_min', None):
             queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
             print(queryset)

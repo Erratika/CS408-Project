@@ -1,0 +1,58 @@
+{% load static %}
+
+<div id="control-wrapper" class="panel">
+
+    <div><span>Price: </span><span id="price-display"></span>
+        <div class="slider-range" id="slider-price"></div>
+    </div>
+
+    <div><span>Rating: </span><span id="rating-display"></span>
+        <div class="slider-range" id="slider-rating"></div>
+    </div>
+
+
+    <button class="collapsible" id="rooms">Rooms</button>
+    <div class="content">
+        <span>Room Types:</span>
+        {% for room_type in room_types_all %}
+            <div><label>
+                <input type="checkbox" name="room_type" checked="checked"
+                       onchange="filterChange()" value="{{ room_type.id }}">{{ room_type.type }}
+            </label></div>
+        {% endfor %}
+        <span>Room Size: </span><span id="size-display"></span>
+        <div class="slider-range" id="slider-size"></div>
+    </div>
+
+    <button class="collapsible" id="facilities">Facilities</button>
+    <div class="content">
+        {% for facility in facilities_all %}
+            <div><label>
+                <input type="checkbox" checked="checked" onchange="filterChange()" value="{{ facility.id }}"
+                       name="facility">{{ facility.facility }}
+            </label>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <button class="collapsible" id="policies">Policies</button>
+    <div class="content">
+        {% for policy in policies_all %}
+            <div><label>
+                <input type="checkbox" checked="checked" onchange="filterChange()" value="{{ policy.id }}"
+                       name="policy"> {{ policy.policy }}
+            </label>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<script>
+    controls = new FilterControls();
+    controls.initialiseAccordian();
+    controls.initialiseSliders();
+
+</script>
+
+
+
