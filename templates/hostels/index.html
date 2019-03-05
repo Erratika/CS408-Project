@@ -14,7 +14,6 @@
             integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30="
             crossorigin="anonymous"></script>
     <script src="http://d3js.org/topojson.v1.min.js"></script>
-    <script src="{% static 'hostels/javascript/FilterControls.js' %}" type="text/javascript" language="JavaScript"></script>
 
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="{% static 'hostels/css/styles.css' %}">
@@ -26,6 +25,14 @@
     {% include 'hostels/filters.html' %}
     {% include 'hostels/map.html' %}
 </div>
-
 </body>
+<script src="{% static 'hostels/javascript/FilterControls.js' %}" type="text/javascript"
+            language="JavaScript"></script>
+<script src="{% static 'hostels/javascript/MapPainter.js' %}" type="text/javascript"
+            language="JavaScript"></script>
+<script>
+    initialiseAccordian();
+    initialiseSliders();
+    getLocations();
+</script>
 </html>

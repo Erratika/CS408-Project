@@ -1,69 +1,71 @@
-    html,body {
-        margin: 0;
-        height:100vh;
+html, body {
+    margin: 0;
+    height: 100vh;
+}
 
-    }
+.collapsible {
+    cursor: pointer;
+    padding: 16px;
+    width: 100%;
+    text-align: left;
+    font-size: 20px;
+    border: black solid 1px;
+    background-color: lightslategray;
+}
 
-    .collapsible {
-        cursor: pointer;
-        padding: 16px;
-        width: 100%;
-        text-align: left;
-        font-size: 20px;
-        border: black solid 1px;
-        background-color: lightslategray;
-    }
+.content {
+    padding: 12px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
 
+}
 
-    .content {
-        padding: 12px;
-        max-height: 400px;
-        overflow-y: auto;
-        display: none;
+.collapsible:hover {
+    background-color: slategrey;
+}
 
-    }
+.region {
+    fill: cornflowerblue;
+}
 
-    .collapsible:hover {
-        background-color: slategrey;
-    }
+.boundary {
+    fill: none;
+    stroke: #000;
+}
 
-    .region {
-        fill: cornflowerblue;
-    }
+.container{
+    display: grid;
+    grid-template-rows: 50% 50%;
+    grid-template-columns: 300px auto 32.5%;
+    height: 100%;
+}
 
-    .boundary {
-        fill: none;
-        stroke: #000;
-    }
+#map-wrapper {
+    background-color: lightgray;
+    grid-column-start: 2;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+        overflow: hidden;
 
-    .container {
-        display: grid;
-        grid-template-rows: 50% 50%;
-        grid-template-columns: 300px auto 32.5%;
-        height: 100%;
-    }
+}
 
-    #map-wrapper {
-        background-color: lightgray;
-        grid-column-start: 2;
-        grid-column-end: 2;
-        grid-row-start: 1;
-        grid-row-end: 3;
-    }
+#control-wrapper {
+    background-color: white;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    overflow: hidden;
+}
 
-    #control-wrapper {
-        background-color: white;
-        grid-column-start: 1;
-        grid-column-end: 2;
-        grid-row-start: 1;
-        grid-row-end: 3;
-        overflow: auto;
-    }
+#cloud-wrapper {
+    background-color: blue;
+    grid-column-start: 3;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 3;
+        overflow: hidden;
 
-    #cloud-wrapper {
-        background-color: blue;
-        grid-column-start: 3;
-        grid-column-end: 3;
-        grid-row-start: 1;
-        grid-row-end: 3;
-    }
+}
