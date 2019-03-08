@@ -16,7 +16,7 @@
         <span>Room Types:</span>
         {% for room_type in room_types_all %}
             <div><label>
-                <input type="checkbox" name="room_type" checked="checked"
+                <input type="checkbox" name="room_type"
                        onchange="getLocations()" value="{{ room_type.id }}">{{ room_type.type }}
             </label></div>
         {% endfor %}
@@ -40,7 +40,7 @@
     <div class="collapse p-3" id="collapsePolicies">
         {% for policy in policies_all %}
             <div><label>
-                <input type="checkbox" checked="checked" onchange="getLocations()" value="{{ policy.id }}"
+                <input type="checkbox"  onchange="getLocations()" value="{{ policy.id }}"
                        name="policy"> {{ policy.policy }}
             </label>
             </div>

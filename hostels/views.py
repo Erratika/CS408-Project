@@ -31,6 +31,7 @@ class LocationsViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = Hostel.objects.all()
 
         # Filter out prices
+        #TODO Reduce use range SEE room sizes
         price_max = self.request.query_params.get('price-max', None)
         price_min = self.request.query_params.get('price-min', None)
         average_prices = Prices.objects.values('hostel').annotate(price_average=Avg('price'))
@@ -41,8 +42,9 @@ class LocationsViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = queryset.filter(id__in=average_prices.values('hostel'))
 
         # Filter out ratings.
-        rating_max = self.request.query_params.get('rating-max')
-        rating_min = self.request.query_params.get('rating-min')
+        #TODO Reduce use range SEE room sizes
+        rating_max = self.request.query_params.get('rating-max',None)
+        rating_min = self.request.query_params.get('rating-min',None)
         average_ratings = RatingsHostel.objects.values('hostel').annotate(overall_rating=Avg('rating'))
         if rating_max:
             average_ratings = average_ratings.filter(overall_rating__lte=rating_max)
@@ -50,10 +52,28 @@ class LocationsViewSet(viewsets.ReadOnlyModelViewSet):
             average_ratings = average_ratings.filter(overall_rating__gte=rating_min)
         queryset = queryset.filter(id__in=average_ratings.values('hostel'))
 
+        #Filter room sizes
+        size_max = self.request.query_params.get('size-max',None)
+        size_min = self.request.query_params.get('size-min', None)
+        if size_max and size_min:
+            queryset = queryset.filter(prices__room_size__in=RoomSizes.objects.filter(size__range=[size_min, size_max])).distinct('id')
+
+        #Filter room types
+        room_type = self.request.query_params.getlist('room_type[]', [])
+        # TODO doesnt loop on empty array needs amended.
+        for r in room_type:
+            queryset = queryset.filter(prices__room_type=r)
+            print(queryset)
+
+        #Filter facilities
         facilities = self.request.query_params.getlist('facility[]', [])
         # TODO doesnt loop on empty array needs amended.
         for f in facilities:
             queryset = queryset.filter(facilities=f)
+        policies = self.request.query_params.getlist('policy[]', [])
+        # TODO doesnt loop on empty array needs amended.
+        for p in policies:
+            queryset = queryset.filter(policies=p)
         return queryset
 
     def list(self, request, **kwargs):
