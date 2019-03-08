@@ -1,6 +1,6 @@
 const wrapper = d3.select('#map-wrapper');
-let width = wrapper.width;
-let height = wrapper.height;
+let width = $('#map-wrapper').width();
+let height = $('#map-wrapper').height();
 let projection = d3.geoMercator();
 let path = d3.geoPath().projection(projection);
 
@@ -11,31 +11,35 @@ let svg = wrapper.append("svg")
 
 //Add zoom functionality and limit panning/zooming.
 svg.call(d3.zoom()
-            .scaleExtent([1,25])
-            .translateExtent([[0,0],[width,height]])
-            .on("zoom",zoom));
-d3.json("{% static 'hostels/maps/topo_eer.json' %}").then(drawMap);
+    .scaleExtent([1, 25])
+    .translateExtent([[0, 0], [width, height]])
+    .on("zoom", zoom));
 
 
 function drawMap(data) {
-    projection.fitExtent([[20, 20], [width - 20, height - 20]], data);
+    json = topojson.feature(data, data.objects.eer);
+    projection = d3.geoMercator().fitExtent([[20, 20], [width - 20, height - 20]], json);
+    path = d3.geoPath().projection(projection);
 
     svg.selectAll("path")
-        .data(data.features)
+        .data(json.features)
         .enter()
         .append("path")
         .attr("d", path)
         .attr("class", "region");
 
+
+
     svg.append("path")
         .datum(topojson.mesh(data, data.objects.eer))
         .attr("d", path)
-        .attr("class", "border");
+        .attr("class", "boundary");
 }
 
 function drawHostels(data) {
+    svg.selectAll("circle").remove();
     svg.selectAll("path")
-        .data(data)
+        .data(data.features)
         .enter()
         .append("circle")
         .attr("class", "hostel")

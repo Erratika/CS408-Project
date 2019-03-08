@@ -1,6 +1,6 @@
 {% load static %}
 
-<div id="control-wrapper" class="panel">
+<div class="col-md-2 accordion p-0">
 
     <div><span>Price: </span><span id="price-display"></span>
         <div class="slider-range" id="slider-price"></div>
@@ -11,24 +11,24 @@
     </div>
 
 
-    <button class="collapsible" id="rooms">Rooms</button>
-    <div class="content">
+    <button class="btn collapsed w-100 btn-outline-dark btn-lg" data-toggle="collapse" data-target="#collapseRooms" id="rooms">Rooms</button>
+    <div class="collapse p-3" id="collapseRooms">
         <span>Room Types:</span>
         {% for room_type in room_types_all %}
             <div><label>
                 <input type="checkbox" name="room_type" checked="checked"
-                       onchange="filterChange()" value="{{ room_type.id }}">{{ room_type.type }}
+                       onchange="getLocations()" value="{{ room_type.id }}">{{ room_type.type }}
             </label></div>
         {% endfor %}
         <span>Room Size: </span><span id="size-display"></span>
         <div class="slider-range" id="slider-size"></div>
     </div>
 
-    <button class="collapsible" id="facilities">Facilities</button>
-    <div class="content">
+    <button class="btn collapsed w-100 btn-outline-dark btn-lg" data-toggle="collapse" data-target="#collapseFacilities" id="facilities">Facilities</button>
+    <div class="collapse p-3" id="collapseFacilities">
         {% for facility in facilities_all %}
             <div><label>
-                <input type="checkbox" checked="checked" onchange="filterChange()" value="{{ facility.id }}"
+                <input type="checkbox" onchange="getLocations()" value="{{ facility.id }}"
                        name="facility">{{ facility.facility }}
             </label>
             </div>
@@ -36,17 +36,20 @@
     </div>
 
 
-    <button class="collapsible" id="policies">Policies</button>
-    <div class="content">
+    <button class="btn collapsed w-100 btn-outline-dark btn-lg" data-toggle="collapse" data-target="#collapsePolicies" id="policies">Policies</button>
+    <div class="collapse p-3" id="collapsePolicies">
         {% for policy in policies_all %}
             <div><label>
-                <input type="checkbox" checked="checked" onchange="filterChange()" value="{{ policy.id }}"
+                <input type="checkbox" checked="checked" onchange="getLocations()" value="{{ policy.id }}"
                        name="policy"> {{ policy.policy }}
             </label>
             </div>
         {% endfor %}
     </div>
 </div>
+<script>
+
+</script>
 
 
 

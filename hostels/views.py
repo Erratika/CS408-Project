@@ -9,13 +9,13 @@ from .serializers import LocationsSerializer, FacilitiesSerializer, PoliciesSeri
 # Create your views here.
 
 def index(request):
-    all_facilities = Facilities.objects.all().order_by('facility')
+    facilities_all = Facilities.objects.all().order_by('facility').values()
     policies_all = Policies.objects.all().order_by('policy')
     room_types_all = RoomTypes.objects.all()
     price_max = Prices.objects.aggregate(Max('price'))
     price_min = Prices.objects.aggregate(Min('price'))
 
-    context = {'facilities_all': all_facilities,
+    context = {'facilities_all': facilities_all,
                'policies_all': policies_all,
                'room_types_all': room_types_all,
                'price_max': price_max,
@@ -29,21 +29,31 @@ class LocationsViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = Hostel.objects.all()
-        averages = Prices.objects.values('hostel').annotate(price_average=Avg('price'))
 
-        if self.request.query_params.get('price_max', None):
-            averages = averages.filter(price_average__lte=self.request.query_params.get('price_max', None))
-        if self.request.query_params.get('price_min', None):
-            averages = averages.filter(price_average__gte=self.request.query_params.get('price_min', None))
-        queryset = queryset.filter(id__in=averages.values('hostel'))
-        if self.request.query_params.get('rating_max', None):
-            queryset = queryset.filter(ratingshostel__rating__lte=self.request.query_params.get('rating_max', None))
-        if self.request.query_params.get('rating_min', None):
-            queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
-        if self.request.query_params.get('size_man', None):
-            queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
-        if self.request.query_params.get('size_min', None):
-            queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
+        # Filter out prices
+        price_max = self.request.query_params.get('price-max', None)
+        price_min = self.request.query_params.get('price-min', None)
+        average_prices = Prices.objects.values('hostel').annotate(price_average=Avg('price'))
+        if price_max:
+            average_prices = average_prices.filter(price_average__lte=price_max)
+        if price_min:
+            average_prices = average_prices.filter(price_average__gte=price_min)
+        queryset = queryset.filter(id__in=average_prices.values('hostel'))
+
+        # Filter out ratings.
+        rating_max = self.request.query_params.get('rating-max')
+        rating_min = self.request.query_params.get('rating-min')
+        average_ratings = RatingsHostel.objects.values('hostel').annotate(overall_rating=Avg('rating'))
+        if rating_max:
+            average_ratings = average_ratings.filter(overall_rating__lte=rating_max)
+        if rating_min:
+            average_ratings = average_ratings.filter(overall_rating__gte=rating_min)
+        queryset = queryset.filter(id__in=average_ratings.values('hostel'))
+
+        facilities = self.request.query_params.getlist('facility[]', [])
+        # TODO doesnt loop on empty array needs amended.
+        for f in facilities:
+            queryset = queryset.filter(facilities=f)
         return queryset
 
     def list(self, request, **kwargs):
