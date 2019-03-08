@@ -1,21 +1,16 @@
-function initialiseAccordian() {
-    $(".collapsible").each(function () {
-        this.addEventListener('click', function () {
-            $(this.nextElementSibling).toggle();
-        });
-    });
-}
-
 function initialiseSliders() {
 
     $("#slider-price").slider({
         range: true,
         min: 0,
-        max: 1500,
-        values: [20.00, 50.00],
+        max: 350,
+        values: [10, 100],
         step: 0.50,
         slide: function (event, ui) {
             $("#price-display").text("£" + ui.values[0].toFixed(2) + " - £" + ui.values[1].toFixed(2));
+        },
+        stop: function (event, ui) {
+            getLocations()
         }
     });
     $("#price-display").text("£" + $("#slider-price").slider("values", 0).toFixed(2) +
@@ -26,10 +21,15 @@ function initialiseSliders() {
         range: true,
         min: 0.0,
         max: 10.0,
-        values: [3.5, 6.5],
+        values: [2, 8],
         step: 0.1,
         slide: function (event, ui) {
             $("#rating-display").text(ui.values[0].toFixed(1) + " - " + ui.values[1].toFixed(1));
+
+        },
+        stop: function (event, ui) {
+            getLocations()
+
         }
     });
     $("#rating-display").text($("#slider-rating").slider("values", 0).toFixed(1) + " - " +
@@ -44,6 +44,9 @@ function initialiseSliders() {
         step: 1,
         slide: function (event, ui) {
             $("#size-display").text(ui.values[0] + " - " + ui.values[1]);
+        },
+        change: function (event, ui) {
+            getLocations()
         }
     });
     $("#size-display").text($("#slider-size").slider("values", 0) + " - " +
@@ -54,8 +57,10 @@ function initialiseSliders() {
 function getLocations() {
     let query = $.param(getValues());
     $.getJSON({
-        url: "/api/locations/" + query,
-        complete: drawHostels
+        url: "/api/locations?" + query,
+        complete: function (res) {
+            drawHostels(JSON.parse(res.responseText))
+        }
     });
 }
 
@@ -65,6 +70,8 @@ function getValues() {
     params['price-max'] = $("#slider-price").slider("values", 1);
     params['rating-min'] = $("#slider-rating").slider("values", 0);
     params["rating-max"] = $("#slider-rating").slider("values", 1);
+    params['room_size-min'] = $("#slider-size").slider("values", 0);
+    params["room_size-max"] = $("#slider-size").slider("values", 1);
     $("input:checked").each(function () {
         if (Array.isArray(params[$(this).attr('name')])) {
             params[$(this).attr('name')].push(parseInt($(this).attr('value')));
