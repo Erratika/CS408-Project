@@ -65,6 +65,8 @@ function getValues() {
     params['price-max'] = $("#slider-price").slider("values", 1);
     params['rating-min'] = $("#slider-rating").slider("values", 0);
     params["rating-max"] = $("#slider-rating").slider("values", 1);
+    params['size-min'] = $("#slider-size").slider("values", 0);
+    params["size-max"] = $("#slider-size").slider("values", 1);
     $("input:checked").each(function () {
         if (Array.isArray(params[$(this).attr('name')])) {
             params[$(this).attr('name')].push(parseInt($(this).attr('value')));

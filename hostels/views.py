@@ -1,10 +1,9 @@
 from django.db.models import Max, Min, Avg
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.response import Response
-
 from hostels.models import *
-from .serializers import LocationsSerializer
+from .serializers import LocationsSerializer, FacilitiesSerializer, PoliciesSerializer, RoomTypesSerializer
 
 
 # Create your views here.
@@ -25,7 +24,7 @@ def index(request):
     return render(request, views, context)
 
 
-class LocationsViewSet(viewsets.ViewSet):
+class LocationsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = LocationsSerializer
 
     def get_queryset(self):
@@ -41,14 +40,29 @@ class LocationsViewSet(viewsets.ViewSet):
             queryset = queryset.filter(ratingshostel__rating__lte=self.request.query_params.get('rating_max', None))
         if self.request.query_params.get('rating_min', None):
             queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
-        if self.request.query_params.get('rating_min', None):
+        if self.request.query_params.get('size_man', None):
             queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
-        if self.request.query_params.get('rating_min', None):
+        if self.request.query_params.get('size_min', None):
             queryset = queryset.filter(ratingshostel__rating__gte=self.request.query_params.get('rating_min', None))
-            print(queryset)
         return queryset
 
-    def list(self, request):
+    def list(self, request, **kwargs):
         queryset = self.get_queryset().values('name', 'location')
         serializer = LocationsSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class FacilitiesViewSet(viewsets.ReadOnlyModelViewSet):
+
+    serializer_class = FacilitiesSerializer
+    queryset = Facilities.objects.all().order_by('facility')
+
+
+class PoliciesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Policies.objects.all().order_by('policy')
+    serializer_class = PoliciesSerializer
+
+
+class RoomTypesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = RoomTypes.objects.all().order_by('type')
+    serializer_class = RoomTypesSerializer
