@@ -1,11 +1,11 @@
 import React, {Component} from "react";
-import Map from "../map/Map";
-import TagCloud from "../tagcloud/TagCloud";
-import Controls from "../controls/Controls";
+import Map from "./map/Map";
+import TagCloud from "./tagcloud/TagCloud";
+import Controls from "./controls/Controls";
 import {withStyles} from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid'
 
-const styles = theme => ({
+const styles = ({
 	root: {
 		height:"100vh"
 	},
@@ -20,11 +20,11 @@ class Dashboard extends Component {
 
 		return (
 			<Grid container className={classes.root}>
-				<Grid item xs ={2}> <Controls/>
+				<Grid item xs ={3}> <Controls/>
 				</Grid>
 				<Grid item xs={5}> <Map/>
 				</Grid>
-				<Grid item xs = {5}>
+				<Grid item xs = {4}>
 					<TagCloud/>
 					<TagCloud/>
 				</Grid>

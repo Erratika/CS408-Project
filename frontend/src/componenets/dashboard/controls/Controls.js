@@ -5,14 +5,22 @@ import ReviewsFilters from "./filters/ReviewsFilters";
 import PoliciesFilters from "./filters/PoliciesFilters";
 import FacilitiesFilters from "./filters/FacilitiesFilters";
 import Paper from "@material-ui/core/Paper";
+import {withStyles} from "@material-ui/core/styles";
 
+const styles = ({
+	fullHeight: {
+		height: "100%",
+	},
+
+});
 
 class Controls extends Component {
 
 
 
 	render() {
-		return <Paper>
+		const {classes} = this.props;
+		return <Paper className = {classes.fullHeight}>
 			<GeneralFilters/>
 			<RoomsFilters/>
 			<FacilitiesFilters/>
@@ -23,4 +31,4 @@ class Controls extends Component {
 	}
 }
 
-export default Controls;
+export default withStyles(styles)(Controls);

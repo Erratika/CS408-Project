@@ -8,6 +8,8 @@ import FormLabel from "@material-ui/core/FormLabel";
 import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {withStyles} from "@material-ui/core/styles";
+
 
 class ReviewsFilters extends Component {
 

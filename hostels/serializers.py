@@ -1,5 +1,6 @@
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from rest_framework.serializers import HyperlinkedModelSerializer
+from rest_framework import serializers
 
 from .models import Hostel, Facilities, Policies, RoomTypes
 
@@ -12,18 +13,27 @@ class LocationsSerializer(GeoFeatureModelSerializer):
 
 
 class FacilitiesSerializer(HyperlinkedModelSerializer):
+    value = serializers.IntegerField(source='id')
+    label = serializers.CharField(source='facility')
+
     class Meta:
         model = Facilities
-        fields = ('id', 'facility')
+        fields = ('value', 'label')
 
 
 class PoliciesSerializer(HyperlinkedModelSerializer):
+    value = serializers.IntegerField(source='id')
+    label = serializers.CharField(source='policy')
+
     class Meta:
         model = Policies
-        fields = ('id', 'policy')
+        fields = ('value', 'label')
 
 
 class RoomTypesSerializer(HyperlinkedModelSerializer):
+    value = serializers.IntegerField(source='id')
+    label = serializers.CharField(source='type')
+
     class Meta:
         model = RoomTypes
-        fields = ('id', 'type')
+        fields = ('value', 'label')
