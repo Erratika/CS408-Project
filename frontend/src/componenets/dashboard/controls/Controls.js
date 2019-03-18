@@ -8,7 +8,7 @@ import Paper from "@material-ui/core/Paper";
 import {withStyles} from "@material-ui/core/styles";
 
 const styles = ({
-	fullHeight: {
+	controls: {
 		height: "100%",
 	},
 
@@ -20,7 +20,7 @@ class Controls extends Component {
 
 	render() {
 		const {classes} = this.props;
-		return <Paper className = {classes.fullHeight}>
+		return <Paper className = {classes.controls}>
 			<GeneralFilters/>
 			<RoomsFilters/>
 			<FacilitiesFilters/>

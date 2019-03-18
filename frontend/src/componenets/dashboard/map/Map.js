@@ -1,9 +1,17 @@
 import React, {Component} from "react";
-import rd3 from "react-d3-library";
-
-const RD3Component = rd3.Component;
+import d3 from 'd3';
 
 class Map extends Component {
+	state = {
+		mapData: null,
+	};
+	componentWillMount(){
+		//load data
+	}
+
+	componentDidMount(){
+		//render map
+	}
 	render() {
 		return <div>
 

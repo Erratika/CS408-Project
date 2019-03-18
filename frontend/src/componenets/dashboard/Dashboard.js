@@ -7,8 +7,11 @@ import Grid from '@material-ui/core/Grid'
 
 const styles = ({
 	root: {
-		height:"100vh"
+		height:"100vh",
 	},
+	max:{
+		maxHeight: "100%"
+	}
 
 });
 
@@ -20,11 +23,11 @@ class Dashboard extends Component {
 
 		return (
 			<Grid container className={classes.root}>
-				<Grid item xs ={3}> <Controls/>
+				<Grid item xs ={3} className={classes.max}> <Controls/>
 				</Grid>
-				<Grid item xs={5}> <Map/>
+				<Grid item xs={5} className={classes.max}> <Map/>
 				</Grid>
-				<Grid item xs = {4}>
+				<Grid item xs = {4} className={classes.max}>
 					<TagCloud/>
 					<TagCloud/>
 				</Grid>
