@@ -5,11 +5,13 @@ import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Typography from "@material-ui/core/Typography";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
-import InputRange from "react-input-range";
 import "react-input-range/lib/css/index.css";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {withStyles} from "@material-ui/core/styles";
 import Select from "react-select";
+import {fetchPolicies} from "../../../../actions/filtersActions";
+import {connect} from "react-redux";
+
 
 const styles = {
 	selectWrapper: {
@@ -24,13 +26,11 @@ const styles = {
 };
 
 class PoliciesFilters extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selectedPolicies: [],
-			policiesOptions: []
-		};
+	componentWillMount(){
+		this.props.fetchPolicies();
 	}
+
+
 	render() {
 		const {classes} = this.props;
 		return (
@@ -44,9 +44,7 @@ class PoliciesFilters extends Component {
 					<FormControl className = {classes.form}>
 						<FormLabel>Policies:</FormLabel>
 						<div className={classes.selectWrapper}><Select isMulti isSearchable
-								value={this.state.selectedPolicies}
-								onChange={this.handleChange}
-								options={this.state.policiesOptions}
+								options={this.props.policiesOptions}
 						/></div>
 					</FormControl>
 				</ExpansionPanelDetails>
@@ -54,6 +52,10 @@ class PoliciesFilters extends Component {
 		);
 	}
 }
+const mapStateToProps = state => ({
+	policiesOptions : state.filters.policiesOptions,
+
+});
 
 
-export default withStyles(styles)(PoliciesFilters);
+export default connect(mapStateToProps,{fetchPolicies})(withStyles(styles)(PoliciesFilters));

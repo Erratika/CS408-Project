@@ -2,11 +2,8 @@ import {FETCH_FACILITIES, FETCH_ROOMTYPES, FETCH_POLICIES} from "../actions/type
 
 const initialState = {
 	facilitiesOptions: [],
-	facilitiesSelected: [],
 	policiesOptions: [],
-	policiesSelected: [],
-	roomTypesOptions: [],
-	roomTypesSelected: [],
+	roomTypesOptions: []
 };
 
 export default function (state = initialState, action) {
