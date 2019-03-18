@@ -35,12 +35,6 @@ const styles = ({
 });
 
 class RoomsFilters extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            size: {min: 1, max: 24},
-        };
-    }
 
     componentWillMount() {
         this.props.fetchRoomTypes();

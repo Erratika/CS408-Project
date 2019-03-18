@@ -80,15 +80,15 @@ class Map extends Component {
 	// }
 	projection() {
 		return geoMercator()
-			.scale(3000)
-			.translate([530 / 2, 720 / 2])
-			.center([-4, 57.5]);
+			.scale(2800)
+			.translate([560 / 2, 630 / 2])
+			.center([-4, 58]);
 	}
 
 
 	render() {
-		return <svg id="map" viewBox={"0 0 530 720"} preserveAspectRatio={"xMidYMid meet"}>
-			<g className="countries">
+		return <svg id="map" style={{width:"100%", height:"100%", overflow:"hidden"}}>
+			<g className="countries" >
 				{
 					this.state.geography.map((d, i) => (
 						<path
