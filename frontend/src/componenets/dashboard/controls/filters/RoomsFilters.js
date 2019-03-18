@@ -38,12 +38,11 @@ class RoomsFilters extends Component {
 		this.state = {
 			size: {min: 1, max: 24},
 			selectedTypes: [],
-			typeOptions: [{value: 1, label: "TV"}]
 		};
 	}
 
 	handleChange = (selectedTypes) => {
-		this.setState({selectedTypes});
+		this.setState({selectedTypes:selectedTypes});
 	};
 
 	render() {
@@ -67,7 +66,6 @@ class RoomsFilters extends Component {
 						<div className={classes.selectWrapper}><Select isMulti isSearchable
 									 value={this.state.selectedTypes}
 									 onChange={this.handleChange}
-									 options={this.state.typeOptions}
 							/></div>
 
 					</FormControl>
