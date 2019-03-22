@@ -1,13 +1,13 @@
 import {FETCH_DATA} from "../actions/types";
 
 const initialState = {
-			locations:[]
+	locations:[]
 };
 
 export default function (state = initialState, action) {
 
 	switch (action.type) {
-		case FETCH_DATA:
+	case FETCH_DATA:
 		return {
 			...state,
 			locations: action.payload
