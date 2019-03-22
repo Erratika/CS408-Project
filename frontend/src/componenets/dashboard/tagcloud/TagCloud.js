@@ -1,12 +1,14 @@
 import React, {Component} from "react";
 import rd3 from "react-d3-library";
+import Paper from "@material-ui/core/Paper";
+
 
 
 class TagCloud extends Component{
 	render(){
-		return <div>
-			<h1>Title</h1>
-		</div>;
+		return <Paper style={{maxHeight:"50%", height:"50%"}}>
+			<svg> </svg>
+		</Paper>;
 	}
 }
 
