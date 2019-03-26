@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'hostels',
     'rest_framework',
     'rest_framework_gis',
-    'frontend'
 ]
 
 MIDDLEWARE = [

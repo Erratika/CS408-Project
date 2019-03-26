@@ -105,14 +105,16 @@ class Map extends Component {
 					}
 				</g>
 				<g className={"hostels"}>
+					{console.log(this.props.locations)}
 					{
 						this.props.locations.map((hostel, i) => (
 							<circle
 								key={`marker-${i}`}
-								cx={this.projection()(hostel.coordinates)[0]}
-								cy={this.projection()(hostel.coordinates)[1]}
+								cx={this.projection()(hostel.geometry.coordinates)[0]}
+								cy={this.projection()(hostel.geometry.coordinates)[1]}
+								r={"1px"}
 								fill="#E91E63"
-								stroke="#FFFFFF"
+								stroke="#000000"
 								className="hostel"
 							/>
 						))

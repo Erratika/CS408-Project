@@ -9,19 +9,8 @@ from .serializers import LocationsSerializer, FacilitiesSerializer, PoliciesSeri
 # Create your views here.
 
 def index(request):
-    facilities_all = Facilities.objects.all().order_by('facility').values()
-    policies_all = Policies.objects.all().order_by('policy')
-    room_types_all = RoomTypes.objects.all()
-    price_max = Prices.objects.aggregate(Max('price'))
-    price_min = Prices.objects.aggregate(Min('price'))
-
-    context = {'facilities_all': facilities_all,
-               'policies_all': policies_all,
-               'room_types_all': room_types_all,
-               'price_max': price_max,
-               'price_min': price_min}
     views = 'hostels/index.html'
-    return render(request, views, context)
+    return render(request, views)
 
 
 class LocationsViewSet(viewsets.ReadOnlyModelViewSet):

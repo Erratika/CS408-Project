@@ -2,7 +2,7 @@ from django.urls import include, path
 from rest_framework import routers
 from hostels import views
 
-from hostels.views import FacilitiesViewSet,RoomTypesViewSet,PoliciesViewSet,LocationsViewSet
+from hostels.views import FacilitiesViewSet, RoomTypesViewSet, PoliciesViewSet, LocationsViewSet
 
 router = routers.DefaultRouter()
 router.register('locations', LocationsViewSet, base_name='Location')
@@ -12,5 +12,5 @@ router.register('room_types', RoomTypesViewSet, base_name='RoomTypes')
 
 urlpatterns = [
     path('api/', include(router.urls)),
-    path('old/',views.index,name='oldindex')
+    path('', views.index, name='index')
 ]

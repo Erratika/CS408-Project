@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development --watch ./frontend/src/index.js --output ./static/frontend/main.js",
-    "build": "webpack --mode production --watch ./frontend/src/index.js --output ./static/frontend/main.js"
+    "dev": "webpack --mode development --watch ./hostels/src/index.js --output ./static/hostels/main.js",
+    "build": "webpack --mode production --watch ./hostels/src/index.js --output ./static/hostels/main.js"
   },
   "repository": {
     "type": "git",
