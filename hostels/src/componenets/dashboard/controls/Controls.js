@@ -72,14 +72,15 @@ class Controls extends Component {
 						<FormLabel>Average Price:</FormLabel>
 						<div className={classes.inputWrapper}>
 							<InputRange draggableTrack
-								maxValue={400}
+								maxValue={250}
 								minValue={0}
 								value={this.state.selectedPrice}
 								step={0.5}
 								onChange={(price) => {
 									this.setState({selectedPrice: price});
-									this.props.updateLocations(this.state);
+
 								}}
+								onChangeComplete={this.props.updateLocations(this.state)}
 								formatLabel={value => "£" + value.toFixed(2)}
 							/>
 						</div>
@@ -92,8 +93,9 @@ class Controls extends Component {
 								step={0.1}
 								onChange={(rating) => {
 									this.setState({selectedRating: rating});
-									this.props.updateLocations(this.state);
 								}}
+								onChangeComplete={this.props.updateLocations(this.state)}
+
 								formatLabel={value => value.toFixed(1)}/>
 						</div>
 					</FormControl>
@@ -117,8 +119,10 @@ class Controls extends Component {
 								step={1}
 								onChange={(size) => {
 									this.setState({selectedSize: size});
-									this.props.updateLocations(this.state);
-								}}/>
+								}}
+								onChangeComplete={this.props.updateLocations(this.state)}
+
+							/>
 						</div>
 						<FormLabel>Room Types:</FormLabel>
 						<div className={classes.selectWrapper}>
