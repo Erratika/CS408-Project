@@ -16,6 +16,6 @@ RUN cd gdal-2.4.0 && ./configure && make && make install && cd ..
 
 RUN mkdir /code
 WORKDIR /code
-ADD requirements.txt /code
+ADD server/requirements.txt /code
 RUN pip3 install -r requirements.txt
 ADD . /code/
