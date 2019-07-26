@@ -1,0 +1,22 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: python:3.7.2
+      - image: postgres
+    working_directory: ~/project
+
+    steps:
+      - checkout
+
+  deploy-stage:
+    docker:
+      - image: python:3.7.2
+      - image: postgres
+    working_directory: /tmp/project
+
+  deploy-prod:
+    docker:
+      - image: python:3.7.2
+      - image: postgres
+    working_directory: /tmp/project
