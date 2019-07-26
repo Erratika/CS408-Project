@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run: npm run build
-      - run python manage.py startserver
+      - run: python manage.py startserver
 
   deploy-stage:
     docker:
@@ -19,7 +19,7 @@ jobs:
     steps:
       - checkout
       - run: npm run build
-      - run python manage.py startserver
+      - run: python manage.py startserver
 
   deploy-prod:
     docker:
@@ -29,4 +29,4 @@ jobs:
     steps:
       - checkout
       - run: npm run build
-      - run python manage.py startserver
+      - run: python manage.py startserver
