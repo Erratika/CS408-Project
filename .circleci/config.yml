@@ -13,7 +13,7 @@ jobs:
           apt install nodejs npm -y &&
           npm install --prefix client/ &&
           npm run build --prefix client/
-      - run: ls -la
+      - run: python server/manage.py
 
   deploy-stage:
     docker:
