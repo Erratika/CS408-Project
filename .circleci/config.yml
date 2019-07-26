@@ -9,6 +9,7 @@ jobs:
     steps:
       - checkout
       - run: |
+          apt update &&
           apt install npm -y &&
           npm run build
       - run: python manage.py
