@@ -8,15 +8,25 @@ jobs:
 
     steps:
       - checkout
+      - run: npm run build
+      - run python manage.py startserver
 
   deploy-stage:
     docker:
       - image: python:3.7.2
       - image: postgres
     working_directory: /tmp/project
+    steps:
+      - checkout
+      - run: npm run build
+      - run python manage.py startserver
 
   deploy-prod:
     docker:
       - image: python:3.7.2
       - image: postgres
     working_directory: /tmp/project
+    steps:
+      - checkout
+      - run: npm run build
+      - run python manage.py startserver
