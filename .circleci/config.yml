@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run: |
           apt update &&
-          apt install nodejs npm -y &&
+          apt install nodejs -y &&
           npm install client/package.json &&
           npm run build --prefix client/
       - run: python manage.py
