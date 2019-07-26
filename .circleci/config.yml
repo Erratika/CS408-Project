@@ -11,7 +11,7 @@ jobs:
       - run: |
           apt update &&
           apt install nodejs npm -y &&
-          npm install client/package.json &&
+          npm install --prefix client/ &&
           npm run build --prefix client/
       - run: python manage.py
 
