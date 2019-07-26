@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - run: |
-          apt install nodejs -y &&
+          apt install npm -y &&
           npm run build
       - run: python manage.py
 
