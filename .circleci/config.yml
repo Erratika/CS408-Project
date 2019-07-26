@@ -8,8 +8,10 @@ jobs:
 
     steps:
       - checkout
-      - run: npm run build
-      - run: python manage.py startserver
+      - run: |
+          sudo apt install node
+          npm run build
+      - run: python manage.py
 
   deploy-stage:
     docker:
