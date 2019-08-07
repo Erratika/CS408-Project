@@ -9,8 +9,8 @@ jobs:
     steps:
       - checkout
       - run: |
-          apt update &&
-          apt install nodejs -y &&
+          apt-get update &&
+          apt-get install nodejs -y &&
           npm install --prefix frontend/ &&
           npm run build --prefix frontend/
       - run: |
