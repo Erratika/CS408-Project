@@ -5,7 +5,6 @@ jobs:
       - image: python
       - image: mdillon/postgis
     working_directory: ~/project
-
     steps:
       - checkout
       - run: |
@@ -17,7 +16,17 @@ jobs:
           pip install -r requirements.txt &&
           python3 manage.py runserver
 
-  deploy-stage:
+  test:
+    docker:
+    - image: python:3.7.2
+    - image: mdillon/postgis
+    working_directory: /tmp/project
+    steps:
+    - checkout
+    - run: npm run build
+    - run: python manage.py startserver
+
+  deploy:
     docker:
       - image: python:3.7.2
       - image: mdillon/postgis
@@ -27,12 +36,13 @@ jobs:
       - run: npm run build
       - run: python manage.py startserver
 
-  deploy-prod:
-    docker:
-      - image: python:3.7.2
-      - image: mdillon/postgis
-    working_directory: /tmp/project
-    steps:
-      - checkout
-      - run: npm run build
-      - run: python manage.py startserver
+workflows:
+  -build
+  -test
+    requires:
+      -build
+  -deploy
+    requires:
+      -test
+    branches:
+      only: master
