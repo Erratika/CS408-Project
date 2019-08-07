@@ -4,3 +4,4 @@ psycopg2-binary==2.7.7
 djangorestframework==3.9.1
 djangorestframework-gis==0.14
 dj-database-url==0.5.0
+GDAL
