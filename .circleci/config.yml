@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  test-python:
     docker:
       - image: python
       - image: mdillon/postgis
@@ -16,19 +16,25 @@ jobs:
           pip install -r requirements.txt &&
           python3 manage.py runserver
 
-  test:
+  test-javascript:
     docker:
-    - image: python:3.7.2
+    - image: python
     - image: mdillon/postgis
-    working_directory: /tmp/project
+    working_directory: ~/project
     steps:
     - checkout
-    - run: npm run build
-    - run: python manage.py startserver
+    - run: |
+        apt-get update &&
+        apt-get install nodejs npm binutils libproj-dev gdal-bin -y &&
+        npm install --prefix frontend/ &&
+        npm run build --prefix frontend/
+    - run: |
+        pip install -r requirements.txt &&
+        python3 manage.py runserver
 
   deploy:
     docker:
-      - image: python:3.7.2
+      - image: python
       - image: mdillon/postgis
     working_directory: /tmp/project
     steps:
@@ -40,10 +46,18 @@ workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - build
-      - test:
+      - style-python
+      - style-javascript
+      - test-python:
           requires:
-            - build
+            - style-python
+      - test-javascript:
+          requires:
+          - style-javascript
       - deploy:
           requires:
-            - test
+            - test-python
+            - test-javascript
+          filters:
+              branches:
+                  only: master
