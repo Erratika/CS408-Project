@@ -2,8 +2,8 @@ version: 2
 jobs:
   build:
     docker:
-      - image: python
-      - image: postgres
+      - image: python:3.7.2
+      - image: mdillon/postgis
     working_directory: ~/project
 
     steps:
@@ -11,16 +11,16 @@ jobs:
       - run: |
           apt update &&
           apt install nodejs npm -y &&
-          npm install --prefix client/ &&
-          npm run build --prefix client/
+          npm install --prefix frontend/ &&
+          npm run build --prefix frontend/
       - run: |
-          pip install -r server/requirements.txt &&
-          python server/manage.py
+          pip install -r requirements.txt &&
+          python3 manage.py runserver
 
   deploy-stage:
     docker:
       - image: python:3.7.2
-      - image: postgres
+      - image: mdillon/postgis
     working_directory: /tmp/project
     steps:
       - checkout
@@ -30,7 +30,7 @@ jobs:
   deploy-prod:
     docker:
       - image: python:3.7.2
-      - image: postgres
+      - image: mdillon/postgis
     working_directory: /tmp/project
     steps:
       - checkout
