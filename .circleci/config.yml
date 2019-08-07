@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run: |
           apt-get update &&
-          apt-get install nodejs npm libgdal-dev -y &&
+          apt-get install nodejs npm binutils libproj-dev gdal-bin -y &&
           npm install --prefix frontend/ &&
           npm run build --prefix frontend/
       - run: |
