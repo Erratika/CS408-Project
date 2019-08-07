@@ -11,6 +11,7 @@ jobs:
       - run: |
           apt-get update &&
           apt-get install nodejs npm -y &&
+          apt-get install npm -y &&
           npm install --prefix frontend/ &&
           npm run build --prefix frontend/
       - run: |
