@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run: |
           apt-get update &&
-          apt-get install nodejs -y &&
+          apt-get install nodejs npm -y &&
           npm install --prefix frontend/ &&
           npm run build --prefix frontend/
       - run: |
