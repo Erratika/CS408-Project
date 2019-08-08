@@ -18,6 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
+#TODO HIDE THIS AND REINIT GITHUB REPOS
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '%t!wy6mct%m%&g#aa-x55vcwosk_=(hvi4_@r$@9%)mk$hq23n'
 
@@ -71,6 +72,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Project.wsgi.application'
+
+#TODO CHANGE TO ENVIRONMENT VARIABLES
 import dj_database_url
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases

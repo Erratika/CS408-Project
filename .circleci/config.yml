@@ -1,5 +1,31 @@
 version: 2
 jobs:
+  style-python:
+    docker:
+    - image: python
+    - image: mdillon/postgis
+    working_directory: ~/project
+    steps:
+    - checkout
+    - run: |
+        apt-get update &&
+        apt-get install pylint -y
+    - run: |
+        pylint **/*.py
+
+  style-javascript:
+    docker:
+    - image: python
+    - image: mdillon/postgis
+    working_directory: ~/project
+    steps:
+    - checkout
+    - run: |
+        apt-get update &&
+        apt-get install nodejs npm -y &&
+        npm install --prefix frontend/ &&
+        npm run build --prefix frontend/
+
   test-python:
     docker:
       - image: python
@@ -9,12 +35,10 @@ jobs:
       - checkout
       - run: |
           apt-get update &&
-          apt-get install nodejs npm binutils libproj-dev gdal-bin -y &&
-          npm install --prefix frontend/ &&
-          npm run build --prefix frontend/
+          apt-get install binutils libproj-dev gdal-bin -y &&
       - run: |
           pip install -r requirements.txt &&
-          python3 manage.py runserver
+          coverage run --source='.' manage.py test the-app-you-want-to-test
 
   test-javascript:
     docker:
@@ -25,12 +49,10 @@ jobs:
     - checkout
     - run: |
         apt-get update &&
-        apt-get install nodejs npm binutils libproj-dev gdal-bin -y &&
+        apt-get install nodejs npm -y &&
         npm install --prefix frontend/ &&
         npm run build --prefix frontend/
-    - run: |
-        pip install -r requirements.txt &&
-        python3 manage.py runserver
+    -run: echo "Run Tests"
 
   deploy:
     docker:

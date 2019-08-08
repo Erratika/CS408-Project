@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import Dashboard from "./dashboard/Dashboard";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import {Provider} from "react-redux";
-import store from '../store';
+import store from "../store";
 
 
 class App extends React.Component {

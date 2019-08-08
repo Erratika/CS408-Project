@@ -9,16 +9,16 @@ from django.contrib.gis.geos.point import Point
 from django.core.management.base import BaseCommand
 from selenium import webdriver
 
-from hostels.models import *
+from hostels.models import Reviews, Hostel, Policies
 
 
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        def getLocations():
+        def get_locations():
             url = 'https://www.hostelworld.com/hostels/Scotland'
             url_regex = re.compile(
-                "^https:\/\/www.hostelworld.com\/((hostels\/[A-Za-z-]*$)|(findabed.php\/ChosenCity.[A-Za-z-]*\/ChosenCountry.Scotland$))")
+                "^https://www.hostelworld.com/((hostels/[A-Za-z-]*$)|(findabed.php/ChosenCity.[A-Za-z-]*/ChosenCountry.Scotland$))")
             response = requests.get(url)
             html = response.content
 
@@ -31,8 +31,8 @@ class Command(BaseCommand):
                     links.add(link['href'])
 
             pattern_php = re.compile(
-                "^https:\/\/www.hostelworld.com\/findabed.php\/ChosenCity.[A-Za-z-]*\/ChosenCountry.Scotland$")
-            pattern_direct = re.compile("^https:\/\/www.hostelworld.com\/hostels\/[A-Za-z-]*$")
+                "^https://www.hostelworld.com/findabed.php/ChosenCity.[A-Za-z-]*/ChosenCountry.Scotland$")
+            pattern_direct = re.compile("^https://www.hostelworld.com/hostels/[A-Za-z-]*$")
             locations = []
             for link in links:
                 location = ""
@@ -44,7 +44,7 @@ class Command(BaseCommand):
                     locations.append(location)
             return locations
 
-        def decomposeRooms(room_description):
+        def decompose_rooms(room_description):
             room_data = room_description.split()
             for x in range(len(room_data)):
                 if room_data[x] == "Double" or re.match("^(?:[2-9]|\d\d\d*)$", room_data[x]):
@@ -70,7 +70,7 @@ class Command(BaseCommand):
                     print("Error handling " + room_data[x])
             return {"room_size": room_size, "room_type": room_type}
 
-        def getRooms(url, browser, hostel):
+        def get_rooms(url, browser, hostel):
             from_date = datetime.now().date()
             duration_delta = timedelta(days=365)
             end_date = from_date + duration_delta
@@ -89,7 +89,7 @@ class Command(BaseCommand):
                 for e in room_elements:
                     room_title = e.find("span", attrs={'class': 'room-title'}).text
                     price = e.find('span', attrs={'class', 'rate-type-price'}).text
-                    room = decomposeRooms(room_title)
+                    room = decompose_rooms(room_title)
 
                     # if not RoomTypes.objects.filter(type=room['room_type']):
                     #     RoomTypes.objects.create(type=room['room_type'])
@@ -109,7 +109,7 @@ class Command(BaseCommand):
                     #                           room_size_id=RoomSizes.objects.get(size=room['room_size']).id,
                     #                           room_type_id=RoomTypes.objects.get(type=room['room_type']).id)
 
-        def getReviews(url, browser, hostel):
+        def get_reviews(url, browser, hostel):
             browser.get(url + "#reviews")
             time.sleep(3)
             soup = BeautifulSoup(browser.page_source, "html.parser")
@@ -159,7 +159,7 @@ class Command(BaseCommand):
                     time.sleep(2)
                     soup = BeautifulSoup(browser.page_source)
 
-        def getPolicies(url, browser, hostel):
+        def get_policies(url, browser, hostel):
             browser.get(url + "#houserules")
             soup = BeautifulSoup(browser.page_source, "html.parser")
             section = soup.find("section", attrs={"name": "ms-house-rules-policies"})
@@ -173,7 +173,7 @@ class Command(BaseCommand):
                     #     PoliciesHostel.objects.create(hostel_id=Hostel.objects.get(name=hostel).id,
                     #                                   policy_id=Policies.objects.get(policy=policy).id)
 
-        def getHostelData(url, browser):
+        def get_hostel_data(url, browser):
             browser.get(url)
             soup = BeautifulSoup(browser.page_source)
             name = soup.find('h1', attrs={'class': 'main-title'})['data-name']
@@ -196,7 +196,7 @@ class Command(BaseCommand):
                 #     FacilitiesHostel.objects.create(hostel_id=Hostel.objects.get(name=name).id,
                 #                                     facility_id=Facilities.objects.get(facilities=facility).id)
             # getPolicies(url, browser, name)
-            getReviews(url, browser, name)
+            get_reviews(url, browser, name)
             # getRooms(url, browser, name)
 
         def geocode(address):
@@ -212,6 +212,6 @@ class Command(BaseCommand):
         browser = webdriver.Chrome('/home/marc/Downloads/chromedriver')
         for link in links:
             with open("data/hostels/" + link[46:].replace("/", "-") + ".json", "w+") as h:
-                getHostelData(link, browser)
+                get_hostel_data(link, browser)
 
         browser.quit()

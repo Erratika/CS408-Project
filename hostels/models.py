@@ -1,11 +1,16 @@
+"""Contains declarations for database models."""
 from django.contrib.gis.db import models
 
 
 class Facilities(models.Model):
+    """A model that represents all the different types of Facilities offered by Hostels
+        i.e. Free Wifi, Lockers, e.t.c."""
     facility = models.CharField(max_length=45)
 
 
 class Policies(models.Model):
+    """A model that represents types of Policies in place by Hostels
+            i.e. Age Restriction, Credit Card Not Accepted, e.t.c."""
     policy = models.CharField(unique=True, max_length=45)
 
 
@@ -27,17 +32,23 @@ class Prices(models.Model):
 
 
 class RatingCategories(models.Model):
+    """A model that represents all the Categories on which hostels are rated on
+            i.e. Location, Cleanliness, Value for Money"""
     category = models.CharField(unique=True, max_length=45)
 
 
 class RatingsHostel(models.Model):
     hostel = models.ForeignKey(Hostel, models.CASCADE, db_column='hostel')
-    rating_category = models.ForeignKey(RatingCategories, models.CASCADE, db_column='rating_category', blank=True,
+    rating_category = models.ForeignKey(RatingCategories,
+                                        models.CASCADE,
+                                        db_column='rating_category',
+                                        blank=True,
                                         null=True)
     rating = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
 
 
 class Reviews(models.Model):
+    """A model that represents Hostels reviews"""
     hostel = models.ForeignKey(Hostel, models.CASCADE, db_column='hostel')
     review = models.TextField(blank=True, null=True)
     date = models.DateTimeField()
@@ -45,8 +56,12 @@ class Reviews(models.Model):
 
 
 class RoomSizes(models.Model):
+    """A model that represents types of Room Sizes available for Hostels where each bed as counted
+                as one. (Double = 1, Twin = 2)"""
     size = models.IntegerField(unique=True)
 
 
 class RoomTypes(models.Model):
+    """A model that represents types of Rooms offered by Hostels.
+                i.e. Private, Male Only, Female Only e.t.c."""
     type = models.CharField(unique=True, max_length=45)

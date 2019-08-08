@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Map from "./map/Map";
 import Controls from "./controls/Controls";
 import {withStyles} from "@material-ui/core/styles";
-import Grid from '@material-ui/core/Grid'
+import Grid from "@material-ui/core/Grid";
 
 const styles = ({
 	root: {
