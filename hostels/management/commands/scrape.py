@@ -1,6 +1,7 @@
 import re
 import time
 from datetime import timedelta, datetime
+import os
 
 import requests
 from bs4 import BeautifulSoup
@@ -201,7 +202,7 @@ class Command(BaseCommand):
 
         def geocode(address):
             response = requests.get(
-                "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&region=uk&key=AIzaSyAC1fGnwPFHXDQXlBeRVuVkEHHDI_Vc_FE")
+                "https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&region=uk&key=" + os.environ.get('GOOGLE_API_KEY'))
             data = response.json()
             location = data['results'][0]['geometry']['location']
             return GEOSGeometry(Point(location['lng'], location['lat']), srid=4326)

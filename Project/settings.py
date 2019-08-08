@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 #TODO HIDE THIS AND REINIT GITHUB REPOS
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%t!wy6mct%m%&g#aa-x55vcwosk_=(hvi4_@r$@9%)mk$hq23n'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
