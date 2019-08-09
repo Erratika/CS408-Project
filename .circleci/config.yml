@@ -24,7 +24,7 @@ jobs:
         apt-get update &&
         apt-get install nodejs npm -y &&
         npm install --prefix frontend/ &&
-        npm run build --prefix frontend/
+        npm run lint --prefix frontend/
 
   test-python:
     docker:
@@ -51,8 +51,7 @@ jobs:
         apt-get update &&
         apt-get install nodejs npm -y &&
         npm install --prefix frontend/ &&
-        npm run build --prefix frontend/
-    -run: echo "Run Tests"
+        npm run test --prefix frontend/
 
   deploy:
     docker:
