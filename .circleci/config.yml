@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  style-python:
+  lint-python:
     docker:
     - image: python
     - image: mdillon/postgis
@@ -13,7 +13,7 @@ jobs:
     - run: |
         pylint **/*.py
 
-  style-javascript:
+  lint-javascript:
     docker:
     - image: python
     - image: mdillon/postgis
@@ -37,8 +37,8 @@ jobs:
           apt-get update &&
           apt-get install binutils libproj-dev gdal-bin -y &&
       - run: |
-          pip install -r requirements.txt &&
-          coverage run --source='.' manage.py test the-app-you-want-to-test
+          pip install -r backend/requirements.txt &&
+          coverage run --source='.' backend/manage.py test the-app-you-want-to-test
 
   test-javascript:
     docker:
@@ -61,20 +61,20 @@ jobs:
     steps:
       - checkout
       - run: npm run build
-      - run: python manage.py startserver
+      - run: python backend/manage.py startserver
 
 workflows:
   version: 2
   build_test_deploy:
     jobs:
-      - style-python
-      - style-javascript
+      - lint-python
+      - lint-javascript
       - test-python:
           requires:
-            - style-python
+            - lint-python
       - test-javascript:
           requires:
-          - style-javascript
+          - lint-javascript
       - deploy:
           requires:
             - test-python
