@@ -11,7 +11,7 @@ jobs:
         apt-get update &&
         apt-get install pylint -y
     - run: |
-        pylint **/*.py
+        pylint backend/**/*.py
 
   lint-javascript:
     docker:
