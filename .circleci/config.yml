@@ -23,8 +23,8 @@ jobs:
     - run: |
         apt-get update &&
         apt-get install nodejs npm -y &&
-        npm install --prefix frontend/ &&
-        npm run lint --prefix frontend/
+        npm install --prefix frontend/
+    - run: npm run lint --prefix frontend/
 
   test-python:
     docker:

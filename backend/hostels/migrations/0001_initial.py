@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=200)),
                 ('location', django.contrib.gis.db.models.fields.PointField(geography=True, srid=4326)),
                 ('description', models.TextField(blank=True, null=True)),
-                ('facilities', models.ManyToManyField(to='backend.hostels.Facilities')),
+                ('facilities', models.ManyToManyField(to='hostels.Facilities')),
             ],
         ),
         migrations.CreateModel(
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
                 ('from_date', models.DateTimeField()),
                 ('to_date', models.DateTimeField()),
                 ('price', models.DecimalField(decimal_places=2, max_digits=16)),
-                ('hostel', models.ForeignKey(db_column='hostel', on_delete=django.db.models.deletion.CASCADE, to='backend.hostels.Hostel')),
+                ('hostel', models.ForeignKey(db_column='hostel', on_delete=django.db.models.deletion.CASCADE, to='hostels.Hostel')),
             ],
         ),
         migrations.CreateModel(
@@ -59,8 +59,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('rating', models.DecimalField(blank=True, decimal_places=1, max_digits=3, null=True)),
-                ('hostel', models.ForeignKey(db_column='hostel', on_delete=django.db.models.deletion.CASCADE, to='backend.hostels.Hostel')),
-                ('rating_category', models.ForeignKey(blank=True, db_column='rating_category', null=True, on_delete=django.db.models.deletion.CASCADE, to='backend.hostels.RatingCategories')),
+                ('hostel', models.ForeignKey(db_column='hostel', on_delete=django.db.models.deletion.CASCADE, to='hostels.Hostel')),
+                ('rating_category', models.ForeignKey(blank=True, db_column='rating_category', null=True, on_delete=django.db.models.deletion.CASCADE, to='hostels.RatingCategories')),
             ],
         ),
         migrations.CreateModel(
@@ -70,7 +70,7 @@ class Migration(migrations.Migration):
                 ('review', models.TextField(blank=True, null=True)),
                 ('date', models.DateTimeField()),
                 ('rating', models.DecimalField(decimal_places=1, max_digits=3)),
-                ('hostel', models.ForeignKey(db_column='hostel', on_delete=django.db.models.deletion.CASCADE, to='backend.hostels.Hostel')),
+                ('hostel', models.ForeignKey(db_column='hostel', on_delete=django.db.models.deletion.CASCADE, to='hostels.Hostel')),
             ],
         ),
         migrations.CreateModel(
@@ -90,16 +90,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='prices',
             name='room_size',
-            field=models.ForeignKey(db_column='room_size', on_delete=django.db.models.deletion.CASCADE, to='backend.hostels.RoomSizes'),
+            field=models.ForeignKey(db_column='room_size', on_delete=django.db.models.deletion.CASCADE, to='hostels.RoomSizes'),
         ),
         migrations.AddField(
             model_name='prices',
             name='room_type',
-            field=models.ForeignKey(db_column='room_type', on_delete=django.db.models.deletion.CASCADE, to='backend.hostels.RoomTypes'),
+            field=models.ForeignKey(db_column='room_type', on_delete=django.db.models.deletion.CASCADE, to='hostels.RoomTypes'),
         ),
         migrations.AddField(
             model_name='hostel',
             name='policies',
-            field=models.ManyToManyField(to='backend.hostels.Policies'),
+            field=models.ManyToManyField(to='hostels.Policies'),
         ),
     ]

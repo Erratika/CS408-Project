@@ -14,7 +14,6 @@ export const fetchData = (options) => dispatch => {
 		policies: options.selectedPolicies.map(p => p.value),
 		roomTypes: options.selectedTypes.map(t => t.value),
 	};
-	console.log(params);
 	let query = querystring.stringify(params);
 	axios.get("/api/locations" +"?"+ query).then(data => {
 		dispatch({

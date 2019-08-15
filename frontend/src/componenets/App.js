@@ -9,7 +9,6 @@ import store from "../store";
 class App extends React.Component {
 
 	render() {
-
 		return (
 			<Provider store={store}>
 				<CssBaseline>
@@ -19,7 +18,6 @@ class App extends React.Component {
 		);
 	}
 }
-
 
 export default App;
 

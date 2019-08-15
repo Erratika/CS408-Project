@@ -27,7 +27,6 @@ class Map extends Component {
 	componentDidMount() {
 		//Fetch Data
 		d3.json("/static/hostels/maps/topo_eer.json").then((data) => {
-
 			this.setState({geography: topojson.feature(data, data.objects.eer).features});
 
 		});

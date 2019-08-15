@@ -7,7 +7,8 @@
     "dev": "webpack --mode development ./src/index.js --output ../backend/static/hostels//javascript/main.js",
     "build": "webpack --mode production ./src/index.js --output ../backend/static/hostels/javascript/main.js",
     "test": "jest",
-    "lint": "eslint --ext .js . --fix"
+    "lint": "eslint --ext .js src/**/ --fix",
+    "storybook": "start-storybook"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,8 @@
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
+    "@storybook/cli": "^5.1.10",
+    "@storybook/react": "^5.1.10",
     "babel-loader": "^8.0.5",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "css-loader": "^2.1.1",

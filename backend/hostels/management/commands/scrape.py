@@ -10,7 +10,7 @@ from django.contrib.gis.geos.point import Point
 from django.core.management.base import BaseCommand
 from selenium import webdriver
 
-from backend.hostels import Reviews, Hostel, Policies
+from hostels import Reviews, Hostel, Policies
 
 
 class Command(BaseCommand):

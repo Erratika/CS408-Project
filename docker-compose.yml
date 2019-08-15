@@ -11,7 +11,7 @@ services:
   web:
     build: .
     restart: always
-    command: bash -c "python3 manage.py makemigrations hostels && python3 manage.py migrate && python3 manage.py collectstatic --noinput && gunicorn Project.wsgi -b 0.0.0.0:8000"
+    command: bash -c "python3 manage.py makemigrations hostels && python3 manage.py migrate && python3 manage.py collectstatic --noinput && gunicorn project.wsgi -b 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
