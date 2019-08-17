@@ -2,7 +2,7 @@ const wrapper = d3.select('#map-wrapper');
 let width = $('#map-wrapper').width();
 let height = $('#map-wrapper').height();
 let projection = d3.geoMercator();
-let path = d3.geoPath().projection(projection);
+let path = WorldMap.projection(projection);
 
 //Create SVG element and add inside wrapper.
 let svg = wrapper.append("svg")
@@ -19,7 +19,7 @@ svg.call(d3.zoom()
 function drawMap(data) {
     json = topojson.feature(data, data.objects.eer);
     projection = d3.geoMercator().fitExtent([[20, 20], [width - 20, height - 20]], json);
-    path = d3.geoPath().projection(projection);
+    path = WorldMap.projection(projection);
 
     svg.selectAll("path")
         .data(json.features)
