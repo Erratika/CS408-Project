@@ -7,8 +7,12 @@
     "dev": "webpack --mode development ./src/index.js --output ../backend/static/hostels//javascript/main.js",
     "build": "webpack --mode production ./src/index.js --output ../backend/static/hostels/javascript/main.js",
     "test": "jest",
+<<<<<<< HEAD
     "lint": "eslint --ext .js src/**/ --fix",
     "storybook": "start-storybook"
+=======
+    "lint": "eslint src/**/*.js --fix"
+>>>>>>> 1a702fb5e7f9f8633029570b3eb79c0b575b09ce
   },
   "repository": {
     "type": "git",
